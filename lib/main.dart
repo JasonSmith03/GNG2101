@@ -7,12 +7,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return new MaterialApp(
-<<<<<<< HEAD
-      title: 'Autoconnect', home: new HomePage(title: 'Autoconnect!')
-
-=======
-      title: 'Autoconnect', home: new HomePage(title: 'Autoconnect!!')
->>>>>>> release/Jason_Branch
+      title: 'Autoconnect', home: new HomePage(title: 'Autoconnect!!!')
     );
   }
 }
