@@ -15,7 +15,7 @@ class MainActivity extends StatefulWidget {
 class _MainActivityState extends State {
 
   String msg = 'Autoconnect: OFF';
-  String pass = 'password';
+  String pass = 'admin';
 
   Future<String> createAlertDialog(BuildContext context){
 
@@ -38,29 +38,15 @@ class _MainActivityState extends State {
                   context,
                   MaterialPageRoute(builder: (context) => RouterPage()),
                 );
-
               }
               else
                 print('this');
-
             },
           )
         ],
-
-
       );
-
-
-
-
     });
-
-
   }
-
-
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -100,11 +86,7 @@ class _MainActivityState extends State {
                 child: Text("Admin"),
                 color: Colors.grey,
                 onPressed: () {
-
-
-
                   createAlertDialog(context);
-
                 },
                 textColor: Colors.black,
                 padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
@@ -118,8 +100,6 @@ class _MainActivityState extends State {
     );
   }
 
-
-
 //  other() {
 //    setState(() {
 //   msg = 'AutoConnecting...';
@@ -127,13 +107,7 @@ class _MainActivityState extends State {
 //  }
 //
 
-
-
-
 }
-
-
-
 
 class SecondRoute extends StatelessWidget {
   @override
@@ -161,42 +135,47 @@ class RouterPage extends StatelessWidget {
   @override
 
   Widget build(BuildContext context){
-
-    return new Scaffold(
-        appBar: new AppBar(title: new Text("Router Page"), backgroundColor: Colors.deepOrangeAccent),
-        body: new Container(
-            child: Center(
-                child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      new RaisedButton(
-                          child : new Text("Set Password"),
-                          color : Colors.amber,
-                          onPressed: (){Navigator.of(context).pushNamed("/SetPasswordPage");}
-                      ),
-
-                      new RaisedButton(
-                          child : new Text("Use Password"),
-                          color : Colors.green,
-                          onPressed: (){Navigator.of(context).pushNamed("/UsePasswordPage");}
-                      ),
-
-                      new RaisedButton(
-                          child : new Text("Saved Passwords"),
-                          color : Colors.pinkAccent,
-                          onPressed: (){Navigator.of(context).pushNamed("/UsePasswordPage");}
-                      )
+        return new Scaffold(
+            appBar: new AppBar(title: new Text("Router Page"), backgroundColor: Colors.deepOrangeAccent),
+            body: new Container(
+ //               child: Center(
+                    child: Column(
+                        //mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          GestureDetector(
+                            child: new Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: <Widget>[
+                            Expanded(
+                              child: Text('Password:'),
+                              ),
+                            Expanded(
+                              child: TextField(
+                              decoration: InputDecoration(hintText: "current wifi password"),
+                            ),
+                            )
+                          ]),
+                          ),
+                      
+                        Align(
+                          alignment: Alignment.bottomCenter,
+                          child: RaisedButton(
+                            child : Text("Use Password"),
+                            color : Colors.green,
+                            onPressed: (){}
+                          ),
+                        ),
+                      // new RaisedButton(
+                      //     child : new Text("Saved Passwords"),
+                      //     color : Colors.pinkAccent,
+                      //     onPressed: (){Navigator.of(context).pushNamed("/UsePasswordPage");}
+                      // )
                     ]
-
                 )
-            )
+ //           )
         )
-
     );
-
   }
-
-
 }
 
 class SetPasswordPage extends StatelessWidget{
@@ -214,18 +193,15 @@ class SetPasswordPage extends StatelessWidget{
                         iconSize: 70,
                         onPressed: null
                     )
-
                   ],
-
                 )
             )
-
         )
     );
-
-
   }
 }
+
+
 class UsePasswordPage extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
@@ -246,10 +222,7 @@ class UsePasswordPage extends StatelessWidget{
             )
         )
     );
-
-
   }
-
 }
 class SavedPasswordPage extends StatelessWidget{
 
@@ -266,15 +239,10 @@ class SavedPasswordPage extends StatelessWidget{
                         iconSize: 70,
                         onPressed: null
                     )
-
                   ],
-
                 )
             )
-
         )
     );
-
-
   }
 }
