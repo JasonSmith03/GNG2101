@@ -269,24 +269,6 @@ class RouterPage extends StatelessWidget {
 
 
 
-
-
-
-
-
-
-
-
-                          //research on how to make message pop up ahead/below a button
-                          // youtube link - https://www.youtube.com/watch?v=WWKhWe_r2MM
-                          //https://www.youtube.com/watch?v=RlBfFswZ94U
-                          //https://www.youtube.com/watch?v=rS6MMTH4NPM
-                          //https://www.youtube.com/watch?v=cQonqcEsjf8
-
-                         //Build the Add password, with 2 text fields for adding the password and month for the password, include a Add button
-                         //for the Store password includes 2 text fields for the password and the month for the password implemented on
-
-
                     ]
                 )
  //           )
