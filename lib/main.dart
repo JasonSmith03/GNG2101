@@ -170,6 +170,103 @@ class RouterPage extends StatelessWidget {
                       //     color : Colors.pinkAccent,
                       //     onPressed: (){Navigator.of(context).pushNamed("/UsePasswordPage");}
                       // )
+                          GestureDetector(
+                            child: new Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: <Widget>[
+                                  Expanded(
+                                    child: Text('Password:'),
+                                  ),
+                                  Expanded(
+                                    child: TextField(
+                                      decoration: InputDecoration(hintText: "Enter wifi password"),
+                                    ),
+                                  )
+                                ]),
+                          ),
+
+                          GestureDetector(
+                            child: new Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: <Widget>[
+                                  Expanded(
+                                    child: Text('Month:'),
+                                  ),
+                                  Expanded(
+                                    child: TextField(
+                                      decoration: InputDecoration(hintText: "password Month"),
+                                    ),
+                                  )
+                                ]),
+                          ),
+
+
+                          Align(
+                            alignment: Alignment.bottomCenter,
+                            child: RaisedButton(
+                                child : Text("Set Password"),
+                                color : Colors.green,
+                                onPressed: (){}
+                            ),
+                          ),
+
+
+                          //Add  text to say "Passwords to send"
+
+                          new Text(
+                              "Passwords to Send",
+                              style: TextStyle(
+                                fontSize: 26.0,
+
+                              ),
+                          ),
+
+                          GestureDetector(
+                            child: new Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: <Widget>[
+                                  Expanded(
+                                    child: Text('October:',
+                                      style: TextStyle(
+                                      fontSize: 22.0,
+
+                                   )
+                                  ),
+                                  ),
+                                  Expanded(
+                                    child : Text('Soccer123',
+                                        style: TextStyle(
+                                          fontSize: 22.0,
+
+                                        )
+                                    ),
+                                  )
+                                ]),
+                          ),
+
+                          GestureDetector(
+                            child: new Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: <Widget>[
+                                  Expanded(
+                                    child: Text('November:',
+                                     style: TextStyle(
+                                       fontSize: 22.0,
+
+                                   )
+                                    ),
+                                  ),
+                                  Expanded(
+                                    child: Text('Hospital321',
+                                        style: TextStyle(
+                                          fontSize: 22.0,
+                                        )
+
+                                    ),
+                                  )
+                                ]),
+                          ),
+                          
                     ]
                 )
  //           )
