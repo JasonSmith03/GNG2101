@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'dart:io';
+import 'package:http/http.dart';
 
 void main() => runApp(MaterialApp(title: "AutoConnect", home: MainActivity(),
     routes: <String, WidgetBuilder>{
@@ -16,6 +18,7 @@ class _MainActivityState extends State {
 
   String msg = 'Autoconnect: OFF';
   String pass = 'admin';
+  String serverResponse = 'pending...'; //password for the wifi from server
 
   Future<String> createAlertDialog(BuildContext context){
 
@@ -50,6 +53,7 @@ class _MainActivityState extends State {
 
   @override
   Widget build(BuildContext context) {
+    
     return Scaffold(
       backgroundColor: Colors.blue,
       appBar: AppBar(
@@ -70,9 +74,11 @@ class _MainActivityState extends State {
                   setState(() {
                     if (msg == 'Autoconnect: ON') {
                       msg = 'Autoconnect: OFF';
+                      serverResponse = 'pending...';
                     }
                     else if (msg == 'Autoconnect: OFF') {
                       msg = 'Autoconnect: ON';
+                      serverResponse = _makeGetRequest();
                     }
                   });
                 },
@@ -80,6 +86,12 @@ class _MainActivityState extends State {
                 textColor: Colors.white,
                 padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
                 splashColor: Colors.grey,
+              ),
+
+              //Server response text 
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text('Password: ' + serverResponse),
               ),
 
               RaisedButton(
@@ -98,8 +110,22 @@ class _MainActivityState extends State {
 
       ),
     );
+
+
+}
+  _makeGetRequest() async {
+      Response response = await get(_localhost());
+      setState(() {
+      serverResponse = response.body;
+    });
   }
 
+  String _localhost() {
+    if (Platform.isAndroid)
+      return 'http://ec2-35-182-74-15.ca-central-1.compute.amazonaws.com:9000/';
+    else // for iOS simulator
+      return 'http://ec2-35-182-74-15.ca-central-1.compute.amazonaws.com:9000/';
+  }
 //  other() {
 //    setState(() {
 //   msg = 'AutoConnecting...';
@@ -343,3 +369,4 @@ class SavedPasswordPage extends StatelessWidget{
     );
   }
 }
+
