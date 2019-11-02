@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'dart:io';
+import 'package:flutter/material.dart';
+import 'package:http/http.dart';
 
 void main() => runApp(MaterialApp(title: "AutoConnect", home: MainActivity(),
     routes: <String, WidgetBuilder>{
@@ -50,6 +53,7 @@ class _MainActivityState extends State {
 
   @override
   Widget build(BuildContext context) {
+    String serverResponse = 'Password: ';
     return Scaffold(
       backgroundColor: Colors.blue,
       appBar: AppBar(
@@ -70,6 +74,7 @@ class _MainActivityState extends State {
                   setState(() {
                     if (msg == 'Autoconnect: ON') {
                       msg = 'Autoconnect: OFF';
+                      _makeGetRequest();
                     }
                     else if (msg == 'Autoconnect: OFF') {
                       msg = 'Autoconnect: ON';
@@ -80,6 +85,12 @@ class _MainActivityState extends State {
                 textColor: Colors.white,
                 padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
                 splashColor: Colors.grey,
+              ),
+
+              //Server response text 
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(serverResponse),
               ),
 
               RaisedButton(
@@ -98,7 +109,21 @@ class _MainActivityState extends State {
 
       ),
     );
+
+  _makeGetRequest() async {
+      Response response = await get(_localhost());
+      setState(() {
+      serverResponse = response.body;
+    });
   }
+
+  String _localhost() {
+    if (Platform.isAndroid)
+      return 'http://ec2-3-15-208-145.us-east-2.compute.amazonaws.com:9000/';
+    else // for iOS simulator
+      return 'http://ec2-3-15-208-145.us-east-2.compute.amazonaws.com:9000/';
+  }
+}
 
 //  other() {
 //    setState(() {
@@ -343,3 +368,4 @@ class SavedPasswordPage extends StatelessWidget{
     );
   }
 }
+
