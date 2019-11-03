@@ -168,7 +168,8 @@ class _RouterPageState extends State<RouterPage>{
   final readMonthText = TextEditingController();
   String inputPassword = "";
   String inputMonth = "";
-  ///
+  //int counter = 0;
+  //var values = ["", ""];
 
   onPressed(){
     setState((){
@@ -242,6 +243,7 @@ class _RouterPageState extends State<RouterPage>{
                                       decoration: InputDecoration(hintText: "password Month"),
                                       controller: readMonthText,
                                     ),
+
                                   )
                                 ]),
                           ),
@@ -265,70 +267,23 @@ class _RouterPageState extends State<RouterPage>{
 
 
                           //Add  text to say "Passwords to send"
-                        
+                          new Text(
+                            "Passwords to Save",
+                             style : TextStyle(
+                              fontSize : 26.0,
+                          )
+
+                          ),
+
                           Padding(
                             padding: EdgeInsets.all(8.0),
                             child: new Text(
-                              "Password: " + inputPassword,
+                              inputMonth + ":         " + inputPassword,
                               style: TextStyle(
-                                fontSize: 14,
+                                fontSize: 36,
                               ),
                             ),
-                          ),
 
-
-                          new Text(
-                              "Passwords to Send",
-                              style: TextStyle(
-                                fontSize: 26.0,
-
-                              ),
-                          ),
-
-                          GestureDetector(
-                            child: new Row(
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                children: <Widget>[
-                                  Expanded(
-                                    child: Text('October:',
-                                      style: TextStyle(
-                                      fontSize: 22.0,
-
-                                   )
-                                  ),
-                                  ),
-                                  Expanded(
-                                    child : Text('Soccer123',
-                                        style: TextStyle(
-                                          fontSize: 22.0,
-
-                                        )
-                                    ),
-                                  )
-                                ]),
-                          ),
-
-                          GestureDetector(
-                            child: new Row(
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                children: <Widget>[
-                                  Expanded(
-                                    child: Text('November:',
-                                     style: TextStyle(
-                                       fontSize: 22.0,
-
-                                   )
-                                    ),
-                                  ),
-                                  Expanded(
-                                    child: Text('Hospital321',
-                                        style: TextStyle(
-                                          fontSize: 22.0,
-                                        )
-
-                                    ),
-                                  )
-                                ]),
                           ),
                           
                     ]
