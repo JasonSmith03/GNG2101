@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dart:io';
 import 'package:http/http.dart';
+import 'package:toast/toast.dart';
 
 void main() => runApp(MaterialApp(title: "AutoConnect", home: MainActivity(),
     routes: <String, WidgetBuilder>{
@@ -157,9 +158,27 @@ class SecondRoute extends StatelessWidget {
 }
 
 
-class RouterPage extends StatelessWidget {
+class RouterPage extends StatefulWidget {
   @override
+  _RouterPageState createState() => _RouterPageState();
+}
 
+class _RouterPageState extends State<RouterPage>{
+  ///For reading the inputted password and storing 
+  final readInputText = TextEditingController();
+  final readMonthText = TextEditingController();
+  String inputPassword = "";
+  String inputMonth = "";
+  ///
+
+  onPressed(){
+    setState((){
+      inputPassword = readInputText.text;
+      inputMonth = readMonthText.text;
+    });
+  }
+
+  @override
   Widget build(BuildContext context){
         return new Scaffold(
             appBar: new AppBar(title: new Text("Router Page"), backgroundColor: Colors.deepOrangeAccent),
@@ -206,6 +225,7 @@ class RouterPage extends StatelessWidget {
                                   Expanded(
                                     child: TextField(
                                       decoration: InputDecoration(hintText: "Enter wifi password"),
+                                      controller: readInputText,
                                     ),
                                   )
                                 ]),
@@ -221,6 +241,7 @@ class RouterPage extends StatelessWidget {
                                   Expanded(
                                     child: TextField(
                                       decoration: InputDecoration(hintText: "password Month"),
+                                      controller: readMonthText,
                                     ),
                                   )
                                 ]),
@@ -232,12 +253,30 @@ class RouterPage extends StatelessWidget {
                             child: RaisedButton(
                                 child : Text("Set Password"),
                                 color : Colors.green,
-                                onPressed: (){}
+                                onPressed: (){
+                                  if (readMonthText.text != ""){
+                                    onPressed();
+                                    Toast.show("The password has successfully been stored!", context, duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
+                                  } else {
+                                    Toast.show("Please a month for the password.", context, duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);                                  
+                                  }
+                                }
                             ),
                           ),
 
 
                           //Add  text to say "Passwords to send"
+                        
+                          Padding(
+                            padding: EdgeInsets.all(8.0),
+                            child: new Text(
+                              "Password: " + inputPassword,
+                              style: TextStyle(
+                                fontSize: 14,
+                              ),
+                            ),
+                          ),
+
 
                           new Text(
                               "Passwords to Send",
