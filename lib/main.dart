@@ -54,7 +54,7 @@ class _MainActivityState extends State {
 
   @override
   Widget build(BuildContext context) {
-    
+
     return Scaffold(
       backgroundColor: Colors.blue,
       appBar: AppBar(
@@ -111,28 +111,27 @@ class _MainActivityState extends State {
 
       ),
     );
-
-
 }
-  _makeGetRequest() async {
-      Response response = await get(_localhost());
-      setState(() {
-      serverResponse = response.body;
-    });
-  }
 
-  String _localhost() {
-    if (Platform.isAndroid)
-      return 'http://ec2-35-182-74-15.ca-central-1.compute.amazonaws.com:9000/';
-    else // for iOS simulator
-      return 'http://ec2-35-182-74-15.ca-central-1.compute.amazonaws.com:9000/';
-  }
 //  other() {
 //    setState(() {
 //   msg = 'AutoConnecting...';
 //    });
 //  }
 //
+
+    _makeGetRequest() async {
+      Response response = await get(_localhost());
+      setState(() {
+      serverResponse = response.body;
+    });
+  }
+  String _localhost() {
+    if (Platform.isAndroid)
+      return 'http://ec2-35-182-74-15.ca-central-1.compute.amazonaws.com:9000/';
+    else // for iOS simulator
+      return 'http://ec2-35-182-74-15.ca-central-1.compute.amazonaws.com:9000/';
+  }
 
 }
 
