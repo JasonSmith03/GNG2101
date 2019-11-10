@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'dart:io';
 import 'package:http/http.dart';
 import 'package:toast/toast.dart';
+import 'dart:async';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() => runApp(MaterialApp(title: "AutoConnect", home: MainActivity(),
     routes: <String, WidgetBuilder>{
@@ -162,6 +164,8 @@ class RouterPage extends StatefulWidget {
   _RouterPageState createState() => _RouterPageState();
 }
 
+
+
 class _RouterPageState extends State<RouterPage>{
   ///For reading the inputted password and storing 
   final readInputText = TextEditingController();
@@ -177,7 +181,175 @@ class _RouterPageState extends State<RouterPage>{
       inputMonth = readMonthText.text;
     });
   }
+  String dropDownValue = 'one';
 
+  final String mPass = "password";
+  final _passwordController = new TextEditingController();
+  String _realPass = "";
+  String _final = "";
+  void getPass() {
+    setState(() {
+      _final = _realPass;
+      _passwordController.clear();
+    });
+  }
+
+  save() async{
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString(mPass, _passwordController.value.text.toString());
+  }
+
+  Future<String> get() async {
+    var password;
+
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    password = prefs.getString(mPass);
+    return password;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    Future<String> password = get();
+    password.then((String password) {
+      _realPass = password;
+      getPass();
+    });
+  }
+
+  @override
+  Widget build(BuildContext context){
+    return new Scaffold(
+      appBar: new AppBar(title: new Text("Router Page"), backgroundColor: Colors.deepOrangeAccent),
+      body: new Container(
+        child: Center(
+          child: Column(
+            children: <Widget>[
+              TextField(
+                decoration:  InputDecoration(
+                    contentPadding: const EdgeInsets.only(top: 10.0),
+                    icon:  Icon(Icons.perm_identity),
+                    labelText: "Please input WiFi password",
+                    helperText: "WiFi Password for Current Month"),
+              ),
+              RaisedButton(
+                color: Colors.blue,
+                child : Text("Set Password"),
+                onPressed: (){
+                  Toast.show("The password has been set", context, duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
+                },
+              ),
+
+              TextField(
+                controller: _passwordController,
+                decoration:  InputDecoration(
+                    contentPadding: const EdgeInsets.only(top: 10.0),
+                    icon:  Icon(Icons.perm_identity),
+                    labelText: "please input password",
+                    helperText: "password of Wi-Fi"),
+              ),
+
+              DropdownButton<String>(
+                icon: Icon(Icons.calendar_today),
+                iconSize: 24,
+                hint: Text("Select Password Month"),
+                value: dropDownValue,
+                items: [
+                  DropdownMenuItem<String>(
+                    value: 'one',
+                    child: Text('January'),
+                  ),
+                  DropdownMenuItem<String>(
+                    value: 'two',
+                    child: Text('February'),
+                  ),
+                  DropdownMenuItem<String>(
+                    value: 'third',
+                    child: Text('March'),
+                  ),
+                  DropdownMenuItem<String>(
+                    value: 'four',
+                    child: Text('April'),
+                  ),
+                  DropdownMenuItem<String>(
+                    value: 'five',
+                    child: Text('May'),
+                  ),
+                  DropdownMenuItem<String>(
+                    value: 'six',
+                    child: Text('June'),
+                  ),
+                  DropdownMenuItem<String>(
+                    value: 'seven',
+                    child: Text('July'),
+                  ),
+                  DropdownMenuItem<String>(
+                    value: 'eight',
+                    child: Text('August'),
+                  ),
+                  DropdownMenuItem<String>(
+                    value: 'nine',
+                    child: Text('September'),
+                  ),
+                  DropdownMenuItem<String>(
+                    value: 'ten',
+                    child: Text('October'),
+                  ),
+                  DropdownMenuItem<String>(
+                    value: 'eleven',
+                    child: Text('November'),
+                  ),
+                  DropdownMenuItem<String>(
+                    value: 'twelve',
+                    child: Text('December'),
+                  ),
+                ],
+
+                onChanged: (String value){
+                  setState(() {
+                    dropDownValue = value;
+                  });
+                },
+
+
+
+
+              ),
+
+              RaisedButton(
+                  color: Colors.blueAccent,
+                  child: Text("save"),
+                  onPressed: () {
+                    Toast.show("Password has been saved", context, duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
+
+                    /*if (readMonthText.text != ""){
+                      onPressed();
+                      Toast.show("The password has successfully been stored!", context, duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
+                    } else {
+                      Toast.show("Please a month for the password.", context, duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
+                    }
+                  }*/
+                    save();
+                    Future<String> password = get();
+                    password.then((String password) {
+                      _realPass = password;
+                      getPass();
+                    }
+                    );
+
+                  }),
+              new Text('password: $_final'),
+
+            ],
+          )
+        ),
+      ),
+    );
+  }
+
+
+
+/*
   @override
   Widget build(BuildContext context){
         return new Scaffold(
@@ -288,11 +460,14 @@ class _RouterPageState extends State<RouterPage>{
                           
                     ]
                 )
- //           )
+            )
         )
     );
   }
+
+ */
 }
+
 
 class SetPasswordPage extends StatelessWidget{
 
