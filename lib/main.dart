@@ -6,11 +6,12 @@ import 'dart:async';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 
-void main() => runApp(MaterialApp(title: 'AutoConnect', home: MainActivity(),
+void main() => runApp(MaterialApp(title: 'AutoConnect', home: MainActivity(), debugShowCheckedModeBanner: false,
     routes: <String, WidgetBuilder>{
       '/SetPasswordPage' : (BuildContext context) => new SetPasswordPage(),
       '/UsePasswordPage' : (BuildContext context) => new UsePasswordPage(),
-      '/SavedPasswordPage' : (BuildContext context) => new SavedPasswordPage()
+      '/SavedPasswordPage' : (BuildContext context) => new SavedPasswordPage(),
+      
     }));
 
 class MainActivity extends StatefulWidget {
