@@ -5,11 +5,11 @@ import 'package:toast/toast.dart';
 import 'dart:async';
 import 'package:shared_preferences/shared_preferences.dart';
 
-void main() => runApp(MaterialApp(title: "AutoConnect", home: MainActivity(),
+void main() => runApp(MaterialApp(title: 'AutoConnect', home: MainActivity(),
     routes: <String, WidgetBuilder>{
-      "/SetPasswordPage" : (BuildContext context) => new SetPasswordPage(),
-      "/UsePasswordPage" : (BuildContext context) => new UsePasswordPage(),
-      "/SavedPasswordPage" : (BuildContext context) => new SavedPasswordPage()
+      '/SetPasswordPage' : (BuildContext context) => new SetPasswordPage(),
+      '/UsePasswordPage' : (BuildContext context) => new UsePasswordPage(),
+      '/SavedPasswordPage' : (BuildContext context) => new SavedPasswordPage()
     }));
 
 class MainActivity extends StatefulWidget {
@@ -29,13 +29,13 @@ class _MainActivityState extends State {
 
     return showDialog(context: context, builder: (context){
       return AlertDialog(
-        title: Text("Enter Password"),
+        title: Text('Enter Password'),
         content: TextField(
           controller: customController,
         ),
         actions: <Widget>[
           MaterialButton(
-            child: Text("Enter"),
+            child: Text('Enter'),
             onPressed: (){
               if (customController.text.toString() == pass){
                 //Navigator.of(context).pop;
@@ -58,11 +58,18 @@ class _MainActivityState extends State {
   Widget build(BuildContext context) {
 
     return Scaffold(
-      backgroundColor: Colors.blue,
+      //backgroundColor: Colors.blue,
       appBar: AppBar(
         title: Text('AutoConnect'),
+        backgroundColor: Colors.blueGrey[400]
       ),
       body: Container(
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage('assets/BackgroundSupesLight.png'),
+            fit: BoxFit.cover
+          )
+        ),
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -72,7 +79,7 @@ class _MainActivityState extends State {
                 style: TextStyle(fontSize: 20, fontStyle: FontStyle.italic),
               ),
               RaisedButton(
-                child: Text("AutoConnect"),
+                child: Text('AutoConnect'),
                 onPressed: (){
                   setState(() {
                     if (msg == 'Autoconnect: ON') {
@@ -85,8 +92,8 @@ class _MainActivityState extends State {
                     }
                   });
                 },
-                color: Colors.blueAccent,
-                textColor: Colors.white,
+                  color: Colors.blue,
+                textColor: Colors.black,
                 padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
                 splashColor: Colors.grey,
               ),
@@ -94,12 +101,13 @@ class _MainActivityState extends State {
               //Server response text 
               Padding(
                 padding: const EdgeInsets.all(8.0),
+                //child: Text(status),
                 child: Text('Password: ' + serverResponse),
               ),
 
               RaisedButton(
-                child: Text("Admin"),
-                color: Colors.grey,
+                child: Text('Admin'),
+                color: Colors.blueGrey[300],
                 onPressed: () {
                   createAlertDialog(context);
                 },
@@ -122,10 +130,13 @@ class _MainActivityState extends State {
 //  }
 //
 
-    _makeGetRequest() async {
-      Response response = await get(_localhost());
-      setState(() {
-      serverResponse = response.body;
+  _makeGetRequest() async {
+    Response response = await get(_localhost());
+    Map<String, String> headers = response.headers;
+    String contentType = headers['content-type'];
+    String json = response.body;
+    setState(() {
+      serverResponse = json;
     });
   }
   String _localhost() {
@@ -134,7 +145,6 @@ class _MainActivityState extends State {
     else // for iOS simulator
       return 'http://ec2-35-182-74-15.ca-central-1.compute.amazonaws.com:9000/';
   }
-
 }
 
 class SecondRoute extends StatelessWidget {
@@ -142,7 +152,7 @@ class SecondRoute extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Wi-fi Config Screen"),
+        title: Text('Wi-fi Config Screen'),
       ),
       body: Center(
         child: RaisedButton(
@@ -170,8 +180,11 @@ class _RouterPageState extends State<RouterPage>{
   ///For reading the inputted password and storing 
   final readInputText = TextEditingController();
   final readMonthText = TextEditingController();
-  String inputPassword = "";
-  String inputMonth = "";
+  TextEditingController currentPassword = TextEditingController();
+  String inputPassword = '';
+  String inputMonth = '';
+  String currentPasswordstr = '';// to be used in POST method to send json object
+  String currPass = ''; //store the entered password value; used with currentPassword Controller
   //int counter = 0;
   //var values = ["", ""];
 
@@ -220,8 +233,14 @@ class _RouterPageState extends State<RouterPage>{
   @override
   Widget build(BuildContext context){
     return new Scaffold(
-      appBar: new AppBar(title: new Text("Router Page"), backgroundColor: Colors.deepOrangeAccent),
+      appBar: new AppBar(title: new Text("Router Page"), backgroundColor: Colors.blueGrey[400]),
       body: new Container(
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage('assets/BackgroundSupesLight.png'),
+            fit: BoxFit.cover
+          )
+        ),
         child: Center(
           child: Column(
             children: <Widget>[
@@ -229,7 +248,7 @@ class _RouterPageState extends State<RouterPage>{
                 decoration:  InputDecoration(
                     contentPadding: const EdgeInsets.only(top: 10.0),
                     icon:  Icon(Icons.perm_identity),
-                    labelText: "Please input WiFi password",
+                    labelText: "Please input Wi-Fi password",
                     helperText: "WiFi Password for Current Month"),
               ),
               RaisedButton(
@@ -237,6 +256,8 @@ class _RouterPageState extends State<RouterPage>{
                 child : Text("Set Password"),
                 onPressed: (){
                   Toast.show("The password has been set", context, duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
+                  currPass = currentPassword.text;
+                  _makePostRequest();
                 },
               ),
 
@@ -245,8 +266,8 @@ class _RouterPageState extends State<RouterPage>{
                 decoration:  InputDecoration(
                     contentPadding: const EdgeInsets.only(top: 10.0),
                     icon:  Icon(Icons.perm_identity),
-                    labelText: "please input password",
-                    helperText: "password of Wi-Fi"),
+                    labelText: "Please input password",
+                    helperText: "Password of Wi-Fi"),
               ),
 
               DropdownButton<String>(
@@ -310,15 +331,11 @@ class _RouterPageState extends State<RouterPage>{
                     dropDownValue = value;
                   });
                 },
-
-
-
-
               ),
 
               RaisedButton(
                   color: Colors.blueAccent,
-                  child: Text("save"),
+                  child: Text("Save"),
                   onPressed: () {
                     Toast.show("Password has been saved", context, duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
 
@@ -336,10 +353,8 @@ class _RouterPageState extends State<RouterPage>{
                       getPass();
                     }
                     );
-
                   }),
               new Text('password: $_final'),
-
             ],
           )
         ),
@@ -347,13 +362,11 @@ class _RouterPageState extends State<RouterPage>{
     );
   }
 
-
-
 /*
   @override
   Widget build(BuildContext context){
         return new Scaffold(
-            appBar: new AppBar(title: new Text("Router Page"), backgroundColor: Colors.deepOrangeAccent),
+            appBar: new AppBar(title: new Text('Router Page'), backgroundColor: Colors.deepOrangeAccent),
             body: new Container(
  //               child: Center(
                     child: Column(
@@ -368,7 +381,8 @@ class _RouterPageState extends State<RouterPage>{
                               ),
                             Expanded(
                               child: TextField(
-                              decoration: InputDecoration(hintText: "current wifi password"),
+                                controller: currentPassword,
+                                decoration: InputDecoration(hintText: 'current wifi password'),
                             ),
                             )
                           ]),
@@ -377,9 +391,12 @@ class _RouterPageState extends State<RouterPage>{
                         Align(
                           alignment: Alignment.bottomCenter,
                           child: RaisedButton(
-                            child : Text("Use Password"),
+                            child : Text('Use Password'),
                             color : Colors.green,
-                            onPressed: (){}
+                            onPressed: (){
+                              currentPasswordstr = currentPassword.text;
+                              _makePostRequest();
+                            }
                           ),
                         ),
                       // new RaisedButton(
@@ -396,7 +413,7 @@ class _RouterPageState extends State<RouterPage>{
                                   ),
                                   Expanded(
                                     child: TextField(
-                                      decoration: InputDecoration(hintText: "Enter wifi password"),
+                                      decoration: InputDecoration(hintText: 'Enter wifi password'),
                                       controller: readInputText,
                                     ),
                                   )
@@ -412,7 +429,7 @@ class _RouterPageState extends State<RouterPage>{
                                   ),
                                   Expanded(
                                     child: TextField(
-                                      decoration: InputDecoration(hintText: "password Month"),
+                                      decoration: InputDecoration(hintText: 'password Month'),
                                       controller: readMonthText,
                                     ),
 
@@ -424,14 +441,14 @@ class _RouterPageState extends State<RouterPage>{
                           Align(
                             alignment: Alignment.bottomCenter,
                             child: RaisedButton(
-                                child : Text("Set Password"),
+                                child : Text('Set Password'),
                                 color : Colors.green,
                                 onPressed: (){
-                                  if (readMonthText.text != ""){
+                                  if (readMonthText.text != ''){
                                     onPressed();
-                                    Toast.show("The password has successfully been stored!", context, duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
+                                    Toast.show('The password has successfully been stored!', context, duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
                                   } else {
-                                    Toast.show("Please a month for the password.", context, duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);                                  
+                                    Toast.show('Please a month for the password.', context, duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);                                  
                                   }
                                 }
                             ),
@@ -440,7 +457,7 @@ class _RouterPageState extends State<RouterPage>{
 
                           //Add  text to say "Passwords to send"
                           new Text(
-                            "Passwords to Save",
+                            'Passwords to Save',
                              style : TextStyle(
                               fontSize : 26.0,
                           )
@@ -450,7 +467,7 @@ class _RouterPageState extends State<RouterPage>{
                           Padding(
                             padding: EdgeInsets.all(8.0),
                             child: new Text(
-                              inputMonth + ":         " + inputPassword,
+                              inputMonth + '          :          ' + inputPassword,
                               style: TextStyle(
                                 fontSize: 36,
                               ),
@@ -464,8 +481,30 @@ class _RouterPageState extends State<RouterPage>{
         )
     );
   }
-
  */
+  //TODO post to server
+  _makePostRequest() async {
+  // set up POST request arguments
+  String url = 'http://ec2-35-182-74-15.ca-central-1.compute.amazonaws.com:9000/';
+  Map<String, String> headers = {"content-type": "application/json"};
+  String json = '{"title": "keyword", "body": currPass}';
+  // make POST request
+  Response response = await post(url, headers: headers, body: json);
+  // check the status code for the result
+  int statusCode = response.statusCode;
+  // this API passes back the id of the new item added to the body
+  String body = response.body;
+   setState(() {
+      currentPasswordstr = body;
+    });
+  // {
+  //   "title": "Hello",
+  //   "body": "body text",
+  //   "userId": 1,
+  //   "id": 101
+  // }
+}
+
 }
 
 
@@ -474,7 +513,7 @@ class SetPasswordPage extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
-        appBar: new AppBar(title : new Text("SetPasswordPage"),backgroundColor: Colors.deepOrangeAccent),
+        appBar: new AppBar(title : new Text('SetPasswordPage'),backgroundColor: Colors.deepOrangeAccent),
         body : new Container(
             child: Center(
                 child : Column(
@@ -498,7 +537,7 @@ class UsePasswordPage extends StatelessWidget{
   Widget build(BuildContext context) {
 
     return new Scaffold(
-        appBar: new AppBar(title: new Text("UsePasswordPage"), backgroundColor: Colors.deepOrangeAccent),
+        appBar: new AppBar(title: new Text('UsePasswordPage'), backgroundColor: Colors.deepOrangeAccent),
         body : new Container(
             child : Center(
                 child : Column(
@@ -520,7 +559,7 @@ class SavedPasswordPage extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
-        appBar: new AppBar(title : new Text("SavedPasswordPage"),backgroundColor: Colors.deepOrangeAccent),
+        appBar: new AppBar(title : new Text('SavedPasswordPage'),backgroundColor: Colors.deepOrangeAccent),
         body : new Container(
             child: Center(
                 child : Column(
