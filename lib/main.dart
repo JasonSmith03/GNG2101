@@ -4,6 +4,7 @@ import 'package:http/http.dart';
 import 'package:toast/toast.dart';
 import 'dart:async';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:convert';
 
 void main() => runApp(MaterialApp(title: 'AutoConnect', home: MainActivity(),
     routes: <String, WidgetBuilder>{
