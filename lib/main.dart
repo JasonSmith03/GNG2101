@@ -1,6 +1,5 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'dart:io';
-import 'package:http/http.dart';
 import 'package:toast/toast.dart';
 import 'dart:async';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -24,6 +23,8 @@ class _MainActivityState extends State {
   String msg = 'Autoconnect: OFF';
   String pass = 'admin';
   String serverResponse = 'pending...'; //password for the wifi from server
+  String url = 'http://ec2-35-182-74-15.ca-central-1.compute.amazonaws.com:9000/';
+  Dio dio = new Dio();
 
   Future<String> createAlertDialog(BuildContext context){
 
@@ -133,19 +134,13 @@ class _MainActivityState extends State {
 //
 
   _makeGetRequest() async {
-    Response response = await get(_localhost());
-    Map<String, String> headers = response.headers;
-    String contentType = headers['content-type'];
-    String json = response.body;
+    Response response = await dio.get(url);
+    //these two line of code below are for extacting data from json through object
+    Map passMap = json.decode(response.toString());
+    var finalpass = new PasswordClass.fromJson(passMap);
     setState(() {
-      serverResponse = json;
+      serverResponse = finalpass.password;
     });
-  }
-  String _localhost() {
-    if (Platform.isAndroid)
-      return 'http://ec2-35-182-74-15.ca-central-1.compute.amazonaws.com:9000/';
-    else // for iOS simulator
-      return 'http://ec2-35-182-74-15.ca-central-1.compute.amazonaws.com:9000/';
   }
 }
 
@@ -186,7 +181,9 @@ class _RouterPageState extends State<RouterPage>{
   String inputPassword = '';
   String inputMonth = '';
   String currentPasswordstr = '';// to be used in POST method to send json object
-  String currPass = ''; //store the entered password value; used with currentPassword Controller
+  String serverResponse = 'Server response';
+  String url = 'http://ec2-35-182-74-15.ca-central-1.compute.amazonaws.com:9000/';
+  Dio dio = new Dio();
   //int counter = 0;
   //var values = ["", ""];
 
@@ -252,13 +249,14 @@ class _RouterPageState extends State<RouterPage>{
                     icon:  Icon(Icons.perm_identity),
                     labelText: "Please input Wi-Fi password",
                     helperText: "WiFi Password for Current Month"),
+                    controller: currentPassword,
               ),
               RaisedButton(
                 color: Colors.blue,
                 child : Text("Set Password"),
                 onPressed: (){
                   Toast.show("The password has been set", context, duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
-                  currPass = currentPassword.text;
+                  currentPasswordstr = currentPassword.text;
                   _makePostRequest();
                 },
               ),
@@ -484,38 +482,18 @@ class _RouterPageState extends State<RouterPage>{
     );
   }
  */
-  //TODO post to server
-  _makePostRequest() async {
-  // set up POST request arguments
-  String url = 'http://ec2-35-182-74-15.ca-central-1.compute.amazonaws.com:9000/';
-  Map<String, String> headers = {"content-type": "application/json"};
-  String json = '{"title": "keyword", "body": currPass}';
-  // make POST request
-  Response response = await post(url, headers: headers, body: json);
-  // check the status code for the result
-  int statusCode = response.statusCode;
-  // this API passes back the id of the new item added to the body
-  String body = response.body;
-   setState(() {
-      currentPasswordstr = body;
-    });
-  // {
-  //   "title": "Hello",
-  //   "body": "body text",
-  //   "userId": 1,
-  //   "id": 101
-  // }
+    _makePostRequest() async {
+  //put data from input field to replace '123456', the response of post is not used here, but just leave it there in case of error message in future.
+   await dio.post(url, data: currentPasswordstr);
+  }
 }
-
-}
-
 
 class SetPasswordPage extends StatelessWidget{
 
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
-        appBar: new AppBar(title : new Text('SetPasswordPage'),backgroundColor: Colors.deepOrangeAccent),
+        appBar: new AppBar(title : new Text('SetPasswordPage')),
         body : new Container(
             child: Center(
                 child : Column(
@@ -539,7 +517,7 @@ class UsePasswordPage extends StatelessWidget{
   Widget build(BuildContext context) {
 
     return new Scaffold(
-        appBar: new AppBar(title: new Text('UsePasswordPage'), backgroundColor: Colors.deepOrangeAccent),
+        appBar: new AppBar(title: new Text('UsePasswordPage')),
         body : new Container(
             child : Center(
                 child : Column(
@@ -561,7 +539,7 @@ class SavedPasswordPage extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
-        appBar: new AppBar(title : new Text('SavedPasswordPage'),backgroundColor: Colors.deepOrangeAccent),
+        appBar: new AppBar(title : new Text('SavedPasswordPage')),
         body : new Container(
             child: Center(
                 child : Column(
@@ -579,3 +557,16 @@ class SavedPasswordPage extends StatelessWidget{
   }
 }
 
+class PasswordClass {
+  final String password;
+
+  PasswordClass(this.password);
+
+  PasswordClass.fromJson(Map<String, dynamic> json)
+      : password = json['password'];
+
+  Map<String, dynamic> toJson() =>
+    {
+      'password' : password,
+    };
+}
