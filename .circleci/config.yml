@@ -1,18 +1,25 @@
+version: 2
+
 name: Dart CI
 
 on: [push]
 
-jobs:
-  build:
+workflows:
+    version: 2
 
-    runs-on: ubuntu-latest
+    my_workflows:
+    
+    jobs:
+       build:
 
-    container:
-      image:  google/dart:latest
+        runs-on: ubuntu-latest
 
-    steps:
-    - uses: actions/checkout@v1
-    - name: Install dependencies
-      run: pub get
-    - name: Run tests
-      run: pub run test
+        container:
+            image:  google/dart:latest
+
+        steps:
+        - uses: actions/checkout@v1
+        - name: Install dependencies
+        run: pub get
+        - name: Run tests
+        run: pub run test
