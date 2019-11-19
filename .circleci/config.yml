@@ -12,8 +12,6 @@ workflows:
     jobs:
        build:
 
-        runs-on: ubuntu-latest
-
         container:
             image:  google/dart:latest
 
