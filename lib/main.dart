@@ -332,6 +332,12 @@ class _RouterPageState extends State<RouterPage>{
     prefs.remove(passKey1);
     prefs.remove(monthKey1);
     //prefs.remove(monthKey1);
+    Future<String> password1 = get1();
+    password1.then((String p1) {
+      _realPass1 = p1;
+      //_passwords.add(_realPass1);
+      getPass1();
+    });
 
   }
 
@@ -341,6 +347,12 @@ class _RouterPageState extends State<RouterPage>{
     //deletemonth2 = prefs.get(monthKey2);
     prefs.remove(passKey2);
     prefs.remove(monthKey2);
+    Future<String> password2 = get2();
+    password2.then((String p2) {
+      _realPass2 = p2;
+      //_passwords.add(_realPass2);
+      getPass2();
+    });
 
   }
 
@@ -383,6 +395,12 @@ class _RouterPageState extends State<RouterPage>{
                   prefs.setString(passKey1, _readInputText3.text);
                   prefs.setString(monthKey1, oldmonth1);
                   Navigator.of(context).pop(newValue);
+                  Future<String> password1 = get1();
+                  password1.then((String p1) {
+                    _realPass1 = p1;
+                    //_passwords.add(_realPass1);
+                    getPass1();
+                  });
                 },
               )
             ],
@@ -434,6 +452,13 @@ class _RouterPageState extends State<RouterPage>{
                   prefs.remove(oldmonth2);
                   prefs.setString(passKey2, _readInputText4.text);
                   prefs.setString(monthKey2, oldmonth2);
+                  Future<String> password2 = get2();
+                  password2.then((String p2) {
+                    _realPass2 = p2;
+                    //_passwords.add(_realPass2);
+                    getPass2();
+
+                  });
 
                   //prefs.remove(passKey1);
                   //prefs.setString(passKey1, newValue);
