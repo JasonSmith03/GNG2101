@@ -23,6 +23,7 @@ class _MainActivityState extends State {
   String msg = 'Autoconnect: OFF';
   String pass = 'admin';
   String serverResponse = 'pending...'; //password for the wifi from server
+  String nextServerResponse = 'pending...'; //next month password from server
   String url = 'http://ec2-35-182-74-15.ca-central-1.compute.amazonaws.com:9000/';
   Dio dio = new Dio();
 
@@ -92,6 +93,7 @@ class _MainActivityState extends State {
                     else if (msg == 'Autoconnect: OFF') {
                       msg = 'Autoconnect: ON';
                       serverResponse = _makeGetRequest();
+                      nextServerResponse = _makeGetRequest();
                     }
                   });
                 },
@@ -106,6 +108,13 @@ class _MainActivityState extends State {
                 padding: const EdgeInsets.all(8.0),
                 //child: Text(status),
                 child: Text('Password: ' + serverResponse),
+              ),
+
+              //Next response text
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                //child: Text(status),
+                child: Text('Password: ' + nextServerResponse),
               ),
 
               RaisedButton(
