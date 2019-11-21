@@ -27,7 +27,19 @@ dependencies:
   cupertino_icons: ^0.1.2
   shared_preferences: ^0.5.4+3
   path_provider: ^1.4.0
-  
+  connectivity: ^0.4.5+3
+  wifi: ^0.1.5
+  url_launcher: ^5.2.5
+
+  wifi_iot:
+    git: https://github.com/alternadom/WiFiFlutter.git
+
+
+
+
+
+
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
