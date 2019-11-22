@@ -32,7 +32,7 @@ class MainActivity extends StatefulWidget {
 class _MainActivityState extends State {
 
   bool connectionStatus = false;
-  String WIFI_SSID = "WIN-BFFP4MARMKN 5784";
+  String WIFI_SSID = "mynet";
   //String ssid2 = "AndroidWifi";
   //String ssid3 = "421 Nelson";
   //String WIFI_SSID = "421 Nelson";
@@ -315,8 +315,8 @@ class _MainActivityState extends State {
   connectingTest() {
     WiFiForIoTPlugin.connect(
       WIFI_SSID,
-      //password: serverResponse,
-      password: "T;77666d",
+      password: serverResponse,
+      //password: "T;77666d",
       security: NetworkSecurity.WPA,
     );
   }
