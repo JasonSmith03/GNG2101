@@ -1,3 +1,4 @@
+import 'package:auto_connect/my_flutter_app_icons.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:toast/toast.dart';
@@ -30,7 +31,7 @@ class MainActivity extends StatefulWidget {
 
 class _MainActivityState extends State {
 
-
+  bool connectionStatus = false;
   String WIFI_SSID = "WIN-BFFP4MARMKN 5784";
   //String ssid2 = "AndroidWifi";
   //String ssid3 = "421 Nelson";
@@ -112,10 +113,67 @@ class _MainActivityState extends State {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+
+              Container(
+                margin: EdgeInsets.only(top: 30, bottom: 30),
+                child: Text(msg,
+                  style: TextStyle(
+                    fontSize: 25,
+                    fontStyle: FontStyle.italic,
+                  ),
+                ),
+              ),
+              /*
               Text(
                 msg,
                 style: TextStyle(fontSize: 20, fontStyle: FontStyle.italic),
               ),
+
+               */
+
+
+
+              Container(
+                width: 260,
+                height: 220,
+                child: FloatingActionButton(
+                    child: Icon(
+                        MyFlutterApp.switch_icon,
+                      color: Colors.black,
+                      size: 160,
+                    ),
+                    backgroundColor: connectionStatus?Colors.white:Colors.green,
+
+                  onPressed: (){
+                    _makeGetRequest('1');
+                    _makeGetRequest('2');
+                    setState(() {
+                      if (msg == 'Autoconnect: ON') {
+                        connectionStatus = true;
+                        msg = 'Autoconnect: OFF';
+                        serverResponse = 'pending...';
+                        nextServerResponse = 'pending...';
+
+                        print(serverResponse);
+                        print(nextServerResponse);
+                      }
+                      else if (msg == 'Autoconnect: OFF') {
+                        connectionStatus = false;
+                        msg = 'Autoconnect: ON';
+                        serverResponse = wifiPass;
+                        nextServerResponse = wifiPass2;
+
+                        print(serverResponse);
+                        print(nextServerResponse);
+                        connectingTest();
+                      }
+                    });
+                  },
+                ),
+              ),
+
+              // old code can be deleted
+              /*
               RaisedButton(
                 child: Text('AutoConnect'),
                 onPressed: (){
@@ -146,6 +204,8 @@ class _MainActivityState extends State {
                 padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
                 splashColor: Colors.grey,
               ),
+              */
+
               RaisedButton(
                   child: Text('idk'),
                   onPressed: (){
@@ -154,11 +214,42 @@ class _MainActivityState extends State {
                   }
               ),
               //Server response text
+              Container(
+                margin: EdgeInsets.only(top: 10),
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  //child: Text(status),
+                  child: Text('Password: ' + serverResponse,
+                    style: TextStyle(
+                      fontSize: 18,
+                    ),
+
+                  ),
+                ),
+              ),
+
+              Container(
+                margin: EdgeInsets.only(top: 2),
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  //child: Text(status),
+                  child: Text('Next Password: ' + nextServerResponse,
+                    style: TextStyle(
+                      fontSize: 18,
+                    ),
+
+                  ),
+                ),
+              ),
+
+              // old code can be deleted
+              /*
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 //child: Text(status),
                 child: Text('Password: ' + serverResponse),
               ),
+
 
               Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -166,6 +257,26 @@ class _MainActivityState extends State {
                 child: Text('Next Password: ' + nextServerResponse),
               ),
 
+               */
+
+              Container(
+                  margin: EdgeInsets.only(top: 20),
+                  alignment: Alignment.bottomCenter,
+                  child: RaisedButton(
+                    child: Text('Admin'),
+                    color: Colors.blueGrey[300],
+                    onPressed: () {
+                      createAlertDialog(context);
+                    },
+                    textColor: Colors.black,
+                    padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
+                    splashColor: Colors.grey,
+                  )
+
+              ),
+
+              // old code can be deleted
+              /*
               RaisedButton(
                 child: Text('Admin'),
                 color: Colors.blueGrey[300],
@@ -176,6 +287,7 @@ class _MainActivityState extends State {
                 padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
                 //splashColor: Colors.grey,
               ),
+              */
             ],
           ),
         ),
