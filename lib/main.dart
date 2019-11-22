@@ -37,7 +37,7 @@ class _MainActivityState extends State {
   //T;77666d
   String msg = "Autoconnect: OFF";
   String msg2 = "";
-  String pass = "a";
+  String pass = "admin";
 
   String nextMonthPass = "T;77666d";
   bool statusAC = false;
