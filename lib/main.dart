@@ -455,11 +455,15 @@ class _RouterPageState extends State<RouterPage>{
   final readInputText = TextEditingController();
   final readMonthText = TextEditingController();
   TextEditingController currentPassword = TextEditingController();
+  TextEditingController currentName = TextEditingController();
   String inputPassword = '';
   String inputMonth = '';
   String currentPasswordstr = '';// to be used in POST method to send json object
+  String currentNamestr = '';
   String serverResponse = 'Server response';
-  String url = 'http://ec2-35-182-74-15.ca-central-1.compute.amazonaws.com:9000/';
+  String url1 = 'http://ec2-35-182-74-15.ca-central-1.compute.amazonaws.com:9000/?id=1';
+  String url2 = 'http://ec2-35-182-74-15.ca-central-1.compute.amazonaws.com:9000/?id=2';
+  String url3 = 'http://ec2-35-182-74-15.ca-central-1.compute.amazonaws.com:9000/?id=3';
   Dio dio = new Dio();
   //int counter = 0;
   //var values = ["", ""];
@@ -841,6 +845,23 @@ class _RouterPageState extends State<RouterPage>{
                   decoration:  InputDecoration(
                       contentPadding: const EdgeInsets.only(top: 10.0),
                       icon:  Icon(Icons.perm_identity),
+                      labelText: "Please input Wi-Fi name",
+                      helperText: "name of Wi-Fi"),
+                  controller: currentName,
+                ),
+                RaisedButton(
+                  color: Colors.blue,
+                  child : Text("Set Name"),
+                  onPressed: (){
+                    Toast.show("The Name has been set", context, duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
+                    currentNamestr = currentName.text;
+                    _makePostRequest('3');
+                  },
+                ),
+                 TextField(
+                  decoration:  InputDecoration(
+                      contentPadding: const EdgeInsets.only(top: 10.0),
+                      icon:  Icon(Icons.perm_identity),
                       labelText: "Please input Wi-Fi password",
                       helperText: "WiFi Password for Current Month"),
                   controller: currentPassword,
@@ -851,7 +872,7 @@ class _RouterPageState extends State<RouterPage>{
                   onPressed: (){
                     Toast.show("The password has been set", context, duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
                     currentPasswordstr = currentPassword.text;
-                    _makePostRequest();
+                    _makePostRequest('1');
                   },
                 ),
 
@@ -1480,9 +1501,11 @@ class _RouterPageState extends State<RouterPage>{
     );
   }
  */
-  _makePostRequest() async {
+  _makePostRequest(var i) async {
     //put data from input field to replace '123456', the response of post is not used here, but just leave it there in case of error message in future.
-    await dio.post(url, data: currentPasswordstr);
+    Response response2;
+    if(i == '1'){response2 = await dio.post(url1, data: currentPasswordstr);}
+    if(i == '3'){response2 = await dio.post(url3, data: currentNamestr);}
   }
 }
 
