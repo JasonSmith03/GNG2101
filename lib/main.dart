@@ -465,8 +465,7 @@ class _RouterPageState extends State<RouterPage>{
   String url2 = 'http://ec2-35-182-74-15.ca-central-1.compute.amazonaws.com:9000/?id=2';
   String url3 = 'http://ec2-35-182-74-15.ca-central-1.compute.amazonaws.com:9000/?id=3';
   Dio dio = new Dio();
-  //int counter = 0;
-  //var values = ["", ""];
+  
 
   onPressed(){
     setState((){
@@ -785,48 +784,6 @@ class _RouterPageState extends State<RouterPage>{
   }
 
 
-
-
-
-
-  /*
-  String dropDownValue = 'one'; //delete
-
-  final String mPass = "password";
-  final _passwordController = new TextEditingController();
-  String _realPass = "";
-  String _final = "";
-  void getPass() {
-    setState(() {
-      _final = _realPass;
-      _passwordController.clear();
-    });
-  }
-
-  save() async{
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setString(mPass, _passwordController.value.text.toString());
-  }
-
-  Future<String> get() async {
-    var password;
-
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    password = prefs.getString(mPass);
-    return password;
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    Future<String> password = get();
-    password.then((String password) {
-      _realPass = password;
-      getPass();
-    });
-  }
-  */
-
   @override
   Widget build(BuildContext context){
     return new Scaffold(
@@ -838,191 +795,143 @@ class _RouterPageState extends State<RouterPage>{
                 fit: BoxFit.cover
             )
         ),
-        child: Center(
-            child: Column(
-              children: <Widget>[
-                TextField(
-                  decoration:  InputDecoration(
-                      contentPadding: const EdgeInsets.only(top: 10.0),
-                      icon:  Icon(Icons.perm_identity),
-                      labelText: "Please input Wi-Fi name",
-                      helperText: "name of Wi-Fi"),
-                  controller: currentName,
-                ),
-                RaisedButton(
-                  color: Colors.blue,
-                  child : Text("Set Name"),
-                  onPressed: (){
-                    Toast.show("The Name has been set", context, duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
-                    currentNamestr = currentName.text;
-                    _makePostRequest('3');
-                  },
-                ),
-                 TextField(
-                  decoration:  InputDecoration(
-                      contentPadding: const EdgeInsets.only(top: 10.0),
-                      icon:  Icon(Icons.perm_identity),
-                      labelText: "Please input Wi-Fi password",
-                      helperText: "WiFi Password for Current Month"),
-                  controller: currentPassword,
-                ),
-                RaisedButton(
-                  color: Colors.blue,
-                  child : Text("Set Password"),
-                  onPressed: (){
-                    Toast.show("The password has been set", context, duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
-                    currentPasswordstr = currentPassword.text;
-                    _makePostRequest('1');
-                  },
-                ),
-
-                Align(
-                  alignment: Alignment.bottomCenter,
-                  child: Container(
-                    child: Text("Up to 2 passwords may be stored."),
-                    margin: EdgeInsets.only(top: 25),
+        child: new SingleChildScrollView(
+                  child: Center(
+              child: Column(
+                children: <Widget>[
+                  TextField(
+                    decoration:  InputDecoration(
+                        contentPadding: const EdgeInsets.only(top: 10.0),
+                        icon:  Icon(Icons.perm_identity),
+                        labelText: "Please input Wi-Fi name",
+                        helperText: "name of Wi-Fi"),
+                    controller: currentName,
                   ),
-                ),
+                  RaisedButton(
+                    color: Colors.blue,
+                    child : Text("Set Name"),
+                    onPressed: (){
+                      Toast.show("The Name has been set", context, duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
+                      currentNamestr = currentName.text;
+                      _makePostRequest('3');
+                    },
+                  ),
+                   TextField(
+                    decoration:  InputDecoration(
+                        contentPadding: const EdgeInsets.only(top: 10.0),
+                        icon:  Icon(Icons.perm_identity),
+                        labelText: "Please input Wi-Fi password",
+                        helperText: "WiFi Password for Current Month"),
+                    controller: currentPassword,
+                  ),
+                  RaisedButton(
+                    color: Colors.blue,
+                    child : Text("Set Password"),
+                    onPressed: (){
+                      Toast.show("The password has been set", context, duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
+                      currentPasswordstr = currentPassword.text;
+                      _makePostRequest('1');
+                    },
+                  ),
 
-                Container(
-                  margin: EdgeInsets.only(top: 12, bottom: 12),
-                  width: 450,
-                  child: Column(
-                    children: <Widget>[
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: <Widget>[
-                          Column(
-                            //mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              Container(
-                                child: Text("          "),
-                              ),
-                            ],
-                          ),
-                          Column(
-                            //mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              Container(
-                                child: Text("Password 1"),
-                              ),
-                            ],
-                          ),
-                          Column(
-                            //mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              Container(
-                                child: Text("Password 2"),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: <Widget>[
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              Container(
-                                child: Text("Password: "),
-                              ),
-                            ],
-                          ),
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              Container(
-                                width: 91,
-                                child: TextField(
-                                    controller: _readInputText1 /*readInputText1*/,
-                                    decoration: InputDecoration(
-                                      hintText: "Password 1",
-                                    )),
-                              ),
-                            ],
-                          ),
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              Container(
-                                width: 91,
-                                child: TextField(
-                                  decoration:
-                                  InputDecoration(hintText: "Password 2"),
-                                  controller: _readInputText2,
-                                  enabled: (_readInputText1.text != ""),
+                  Align(
+                    alignment: Alignment.bottomCenter,
+                    child: Container(
+                      child: Text("Up to 2 passwords may be stored."),
+                      margin: EdgeInsets.only(top: 25),
+                    ),
+                  ),
+
+                  Container(
+                    margin: EdgeInsets.only(top: 12, bottom: 12),
+                    width: 450,
+                    child: Column(
+                      children: <Widget>[
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: <Widget>[
+                            Column(
+                              //mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                                Container(
+                                  child: Text("          "),
                                 ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: <Widget>[
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              Container(
-                                child: Text("Month: "),
-                              ),
-                            ],
-                          ),
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              Container(
-                                width: 81,
-                                child: DropdownButton<String>(
-                                  icon: Icon(Icons.calendar_today),
-                                  iconSize: 10,
-                                  elevation: 8,
-                                  style: TextStyle(
-                                      color: Colors.deepPurple
-                                  ),
-                                  underline: Container(
-                                    height: 2,
-                                    width: 5,
-                                    color: Colors.deepPurpleAccent,
-                                  ),
-                                  onChanged: (String newValue) {
-                                    setState(() {
-                                      dropDownValue1 = newValue;
-                                    });
-                                  },
-                                  value: dropDownValue1,
-                                  items: <String>[
-                                    "",
-                                    "January",
-                                    "February",
-                                    "March",
-                                    "April",
-                                    "May",
-                                    "June",
-                                    "July",
-                                    "August",
-                                    "September",
-                                    "October",
-                                    "November",
-                                    "December"
-                                  ].map<DropdownMenuItem<String>>((String value) {
-                                    return DropdownMenuItem<String>(
-                                      value: value,
-                                      child: Text(value),
-                                    );
-                                  }).toList(),
+                              ],
+                            ),
+                            Column(
+                              //mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                                Container(
+                                  child: Text("Password 1"),
                                 ),
-                              ),
-                            ],
-                          ),
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              Container(
-                                width: 81,
-                                child: IgnorePointer(
-                                  ignoring: (dropDownValue1 == ""),
+                              ],
+                            ),
+                            Column(
+                              //mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                                Container(
+                                  child: Text("Password 2"),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: <Widget>[
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                                Container(
+                                  child: Text("Password: "),
+                                ),
+                              ],
+                            ),
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                                Container(
+                                  width: 91,
+                                  child: TextField(
+                                      controller: _readInputText1 /*readInputText1*/,
+                                      decoration: InputDecoration(
+                                        hintText: "Password 1",
+                                      )),
+                                ),
+                              ],
+                            ),
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                                Container(
+                                  width: 91,
+                                  child: TextField(
+                                    decoration:
+                                    InputDecoration(hintText: "Password 2"),
+                                    controller: _readInputText2,
+                                    enabled: (_readInputText1.text != ""),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: <Widget>[
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                                Container(
+                                  child: Text("Month: "),
+                                ),
+                              ],
+                            ),
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                                Container(
+                                  width: 81,
                                   child: DropdownButton<String>(
                                     icon: Icon(Icons.calendar_today),
                                     iconSize: 10,
@@ -1035,12 +944,12 @@ class _RouterPageState extends State<RouterPage>{
                                       width: 5,
                                       color: Colors.deepPurpleAccent,
                                     ),
-                                    value: dropDownValue2,
-                                    onChanged: (String newValue2) {
+                                    onChanged: (String newValue) {
                                       setState(() {
-                                        dropDownValue2 = newValue2;
+                                        dropDownValue1 = newValue;
                                       });
                                     },
+                                    value: dropDownValue1,
                                     items: <String>[
                                       "",
                                       "January",
@@ -1063,444 +972,267 @@ class _RouterPageState extends State<RouterPage>{
                                     }).toList(),
                                   ),
                                 ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-
-                Container(
-                  margin: EdgeInsets.only(bottom: 8),
-                  child: Align(
-                    alignment: Alignment.bottomCenter,
-                    child: RaisedButton(
-                        child: Text("Save Password"),
-                        color: Colors.blueAccent,
-                        onPressed: () {
-                          //must first check if already 2 passwords
-
-                          if (count < 2) {
-                            if ((_readInputText1.text != "") &&
-                                (_readInputText2.text != "")) {
-                              if ((dropDownValue1 == "") &&
-                                  (dropDownValue2 == "")) {
-                                Toast.show("Please enter a month for the password(s).",
-                                    context,
-                                    duration: Toast.LENGTH_LONG,
-                                    gravity: Toast.BOTTOM);
-                              } else {
-                                count += 2;
-                                save1();
-                                Future<String> password1 = get1();
-                                password1.then((String p1) {
-                                  _realPass1 = p1;
-                                  //_passwords.add(_realPass1);
-                                  getPass1();
-
-                                });
-                                Future<String> password2 = get2();
-                                password2.then((String p2) {
-                                  _realPass2 = p2;
-                                  //_passwords.add(_realPass2);
-                                  getPass2();
-
-                                });
-
-                                Toast.show(
-                                    "The passwords have been stored.",
-                                    context,
-                                    duration: Toast.LENGTH_LONG,
-                                    gravity: Toast.BOTTOM);
-                              }
-                            } else if ((_readInputText1.text != "")) {
-                              if (dropDownValue1 == "") {
-                                Toast.show("Please enter a month for the password.",
-                                    context,
-                                    duration: Toast.LENGTH_LONG,
-                                    gravity: Toast.BOTTOM);
-                              } else {
-                                count++;
-                                save2();
-                                Future<String> password1 = get1();
-                                password1.then((String p3) {
-                                  _realPass1 = p3;
-                                  //_passwords.add(_realPass1);
-                                  getPass1();
-
-                                });
-                                Future<String> password2 = get2();
-                                password2.then((String p4) {
-                                  _realPass2 = p4;
-                                  //_passwords.add(_realPass2);
-                                  getPass2();
-
-
-                                });
-                                Toast.show(
-                                    "The password has been stored.",
-                                    context,
-                                    duration: Toast.LENGTH_LONG,
-                                    gravity: Toast.BOTTOM);
-                              }
-                            }
-                          } else {
-                            Toast.show(
-                                "You have already entered two passwords.", context,
-                                duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
-                          }
-
-                          //_passwords = [_final1, _final2];
-                        }
-                    ),
-                  ),
-                ),
-
-                ListView(
-                  padding: const EdgeInsets.all(8),
-                  shrinkWrap: true,
-                  children: <Widget>[
-                    Align(
-                        child: Container(
-                          alignment: Alignment.bottomCenter,
-                          child: Text("Display Saved Passwords",
-                            style: TextStyle(
-                              fontSize: 20,
+                              ],
                             ),
-                          ),
-                          margin: EdgeInsets.only(bottom: 10),
-                        )
-
-
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                                Container(
+                                  width: 81,
+                                  child: IgnorePointer(
+                                    ignoring: (dropDownValue1 == ""),
+                                    child: DropdownButton<String>(
+                                      icon: Icon(Icons.calendar_today),
+                                      iconSize: 10,
+                                      elevation: 8,
+                                      style: TextStyle(
+                                          color: Colors.deepPurple
+                                      ),
+                                      underline: Container(
+                                        height: 2,
+                                        width: 5,
+                                        color: Colors.deepPurpleAccent,
+                                      ),
+                                      value: dropDownValue2,
+                                      onChanged: (String newValue2) {
+                                        setState(() {
+                                          dropDownValue2 = newValue2;
+                                        });
+                                      },
+                                      items: <String>[
+                                        "",
+                                        "January",
+                                        "February",
+                                        "March",
+                                        "April",
+                                        "May",
+                                        "June",
+                                        "July",
+                                        "August",
+                                        "September",
+                                        "October",
+                                        "November",
+                                        "December"
+                                      ].map<DropdownMenuItem<String>>((String value) {
+                                        return DropdownMenuItem<String>(
+                                          value: value,
+                                          child: Text(value),
+                                        );
+                                      }).toList(),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ],
                     ),
-                    Container(
-                      margin: EdgeInsets.only(top: 5, bottom: 5),
-                      height: 50,
-                      color: Colors.blue,
-                      child: Row(
-                        children: <Widget>[
-                          Column(
-                            children: <Widget>[
-                              IconButton(
-                                  icon: Icon(Icons.edit),
-                                  onPressed: (){
-                                    edit1(context);
+                  ),
+
+                  Container(
+                    margin: EdgeInsets.only(bottom: 8),
+                    child: Align(
+                      alignment: Alignment.bottomCenter,
+                      child: RaisedButton(
+                          child: Text("Save Password"),
+                          color: Colors.blueAccent,
+                          onPressed: () {
+                            //must first check if already 2 passwords
+
+                            if (count < 2) {
+                              if ((_readInputText1.text != "") &&
+                                  (_readInputText2.text != "")) {
+                                if ((dropDownValue1 == "") &&
+                                    (dropDownValue2 == "")) {
+                                  Toast.show("Please enter a month for the password(s).",
+                                      context,
+                                      duration: Toast.LENGTH_LONG,
+                                      gravity: Toast.BOTTOM);
+                                } else {
+                                  count += 2;
+                                  save1();
+                                  Future<String> password1 = get1();
+                                  password1.then((String p1) {
+                                    _realPass1 = p1;
+                                    //_passwords.add(_realPass1);
                                     getPass1();
-                                  }
-                              ),
-                            ],
-                          ),
-                          Column(
-                            children: <Widget>[
-                              IconButton(
-                                  icon: Icon(Icons.delete),
-                                  onPressed: (){
-                                    setState(() {
-                                      delete1();
-                                      getPass1();
-                                    });
 
-                                  }
-                              )
-                            ],
-                          ),
+                                  });
+                                  Future<String> password2 = get2();
+                                  password2.then((String p2) {
+                                    _realPass2 = p2;
+                                    //_passwords.add(_realPass2);
+                                    getPass2();
 
-                          Column(
-                            children: <Widget>[
-                              Text('password: $_final1',
-                                style:TextStyle(
-                                    fontSize: 18,
-                                    color: Colors.white
-                                ) ,
-                              )
-                            ],
-                          )
-                        ],
+                                  });
+
+                                  Toast.show(
+                                      "The passwords have been stored.",
+                                      context,
+                                      duration: Toast.LENGTH_LONG,
+                                      gravity: Toast.BOTTOM);
+                                }
+                              } else if ((_readInputText1.text != "")) {
+                                if (dropDownValue1 == "") {
+                                  Toast.show("Please enter a month for the password.",
+                                      context,
+                                      duration: Toast.LENGTH_LONG,
+                                      gravity: Toast.BOTTOM);
+                                } else {
+                                  count++;
+                                  save2();
+                                  Future<String> password1 = get1();
+                                  password1.then((String p3) {
+                                    _realPass1 = p3;
+                                    //_passwords.add(_realPass1);
+                                    getPass1();
+
+                                  });
+                                  Future<String> password2 = get2();
+                                  password2.then((String p4) {
+                                    _realPass2 = p4;
+                                    //_passwords.add(_realPass2);
+                                    getPass2();
+
+
+                                  });
+                                  Toast.show(
+                                      "The password has been stored.",
+                                      context,
+                                      duration: Toast.LENGTH_LONG,
+                                      gravity: Toast.BOTTOM);
+                                }
+                              }
+                            } else {
+                              Toast.show(
+                                  "You have already entered two passwords.", context,
+                                  duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
+                            }
+
+                          }
                       ),
                     ),
-                    Container(
+                  ),
+
+                  ListView(
+                    padding: const EdgeInsets.all(8),
+                    shrinkWrap: true,
+                    children: <Widget>[
+                      Align(
+                          child: Container(
+                            alignment: Alignment.bottomCenter,
+                            child: Text("Display Saved Passwords",
+                              style: TextStyle(
+                                fontSize: 20,
+                              ),
+                            ),
+                            margin: EdgeInsets.only(bottom: 10),
+                          )
+
+
+                      ),
+                      Container(
                         margin: EdgeInsets.only(top: 5, bottom: 5),
                         height: 50,
-                        color : Colors.blue,
+                        color: Colors.blue,
                         child: Row(
                           children: <Widget>[
                             Column(
                               children: <Widget>[
                                 IconButton(
                                     icon: Icon(Icons.edit),
-                                    onPressed: ()  {
-                                      setState(() {
-                                        edit2(context);
-                                        getPass2();
-                                      });
-                                    }
-                                )
-                              ],
-                            ),
-                            Column(
-                              children: <Widget>[
-                                IconButton(
-                                    icon: Icon(Icons.delete),
-                                    onPressed:(){
-                                      setState(() {
-                                        delete2();
-                                        getPass2();
-
-                                      });
+                                    onPressed: (){
+                                      edit1(context);
+                                      getPass1();
                                     }
                                 ),
                               ],
                             ),
                             Column(
                               children: <Widget>[
-                                Text('Password: $_final2',
-                                  style: TextStyle(
+                                IconButton(
+                                    icon: Icon(Icons.delete),
+                                    onPressed: (){
+                                      setState(() {
+                                        delete1();
+                                        getPass1();
+                                      });
+
+                                    }
+                                )
+                              ],
+                            ),
+
+                            Column(
+                              children: <Widget>[
+                                Text('Password: $_final1',
+                                  style:TextStyle(
                                       fontSize: 18,
                                       color: Colors.white
-                                  ),
+                                  ) ,
                                 )
                               ],
                             )
                           ],
-                        )
-
-
-                    )
-                  ],
-
-                ),
-
-
-
-
-
-
-
-                /*
-              TextField(
-                controller: _passwordController,
-                decoration:  InputDecoration(
-                    contentPadding: const EdgeInsets.only(top: 10.0),
-                    icon:  Icon(Icons.perm_identity),
-                    labelText: "Please input password",
-                    helperText: "Password of Wi-Fi"),
-              ),
-
-              DropdownButton<String>(
-                icon: Icon(Icons.calendar_today),
-                iconSize: 24,
-                hint: Text("Select Password Month"),
-                value: dropDownValue,
-                items: [
-                  DropdownMenuItem<String>(
-                    value: 'one',
-                    child: Text('January'),
-                  ),
-                  DropdownMenuItem<String>(
-                    value: 'two',
-                    child: Text('February'),
-                  ),
-                  DropdownMenuItem<String>(
-                    value: 'third',
-                    child: Text('March'),
-                  ),
-                  DropdownMenuItem<String>(
-                    value: 'four',
-                    child: Text('April'),
-                  ),
-                  DropdownMenuItem<String>(
-                    value: 'five',
-                    child: Text('May'),
-                  ),
-                  DropdownMenuItem<String>(
-                    value: 'six',
-                    child: Text('June'),
-                  ),
-                  DropdownMenuItem<String>(
-                    value: 'seven',
-                    child: Text('July'),
-                  ),
-                  DropdownMenuItem<String>(
-                    value: 'eight',
-                    child: Text('August'),
-                  ),
-                  DropdownMenuItem<String>(
-                    value: 'nine',
-                    child: Text('September'),
-                  ),
-                  DropdownMenuItem<String>(
-                    value: 'ten',
-                    child: Text('October'),
-                  ),
-                  DropdownMenuItem<String>(
-                    value: 'eleven',
-                    child: Text('November'),
-                  ),
-                  DropdownMenuItem<String>(
-                    value: 'twelve',
-                    child: Text('December'),
+                        ),
+                      ),
+                      Container(
+                          margin: EdgeInsets.only(top: 5, bottom: 5),
+                          height: 50,
+                          color : Colors.blue,
+                          child: Row(
+                            children: <Widget>[
+                              Column(
+                                children: <Widget>[
+                                  IconButton(
+                                      icon: Icon(Icons.edit),
+                                      onPressed: ()  {
+                                        setState(() {
+                                          edit2(context);
+                                          getPass2();
+                                        });
+                                      }
+                                  )
+                                ],
+                              ),
+                              Column(
+                                children: <Widget>[
+                                  IconButton(
+                                      icon: Icon(Icons.delete),
+                                      onPressed:(){
+                                        setState(() {
+                                          delete2();
+                                          getPass2();
+                                        });
+                                      }
+                                  ),
+                                ],
+                              ),
+                              Column(
+                                children: <Widget>[
+                                  Text('Password: $_final2',
+                                    style: TextStyle(
+                                        fontSize: 18,
+                                        color: Colors.white
+                                    ),
+                                  )
+                                ],
+                              )
+                            ],
+                          )
+                      )
+                    ],
                   ),
                 ],
-
-                onChanged: (String value){
-                  setState(() {
-                    dropDownValue = value;
-                  });
-                },
-              ),
-
-              RaisedButton(
-                  color: Colors.blueAccent,
-                  child: Text("Save"),
-                  onPressed: () {
-                    Toast.show("Password has been saved", context, duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
-
-                    /*if (readMonthText.text != ""){
-                      onPressed();
-                      Toast.show("The password has successfully been stored!", context, duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
-                    } else {
-                      Toast.show("Please a month for the password.", context, duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
-                    }
-                  }*/
-                    save();
-                    Future<String> password = get();
-                    password.then((String password) {
-                      _realPass = password;
-                      getPass();
-                    }
-                    );
-                  }),
-              new Text('password: $_final'),
-              */
-              ],
-            )
+              )
+          ),
         ),
       ),
     );
   }
 
-/*
-  @override
-  Widget build(BuildContext context){
-        return new Scaffold(
-            appBar: new AppBar(title: new Text('Router Page'), backgroundColor: Colors.deepOrangeAccent),
-            body: new Container(
- //               child: Center(
-                    child: Column(
-                        //mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          GestureDetector(
-                            child: new Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: <Widget>[
-                            Expanded(
-                              child: Text('Password:'),
-                              ),
-                            Expanded(
-                              child: TextField(
-                                controller: currentPassword,
-                                decoration: InputDecoration(hintText: 'current wifi password'),
-                            ),
-                            )
-                          ]),
-                          ),
 
-                        Align(
-                          alignment: Alignment.bottomCenter,
-                          child: RaisedButton(
-                            child : Text('Use Password'),
-                            color : Colors.green,
-                            onPressed: (){
-                              currentPasswordstr = currentPassword.text;
-                              _makePostRequest();
-                            }
-                          ),
-                        ),
-                      // new RaisedButton(
-                      //     child : new Text("Saved Passwords"),
-                      //     color : Colors.pinkAccent,
-                      //     onPressed: (){Navigator.of(context).pushNamed("/UsePasswordPage");}
-                      // )
-                          GestureDetector(
-                            child: new Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: <Widget>[
-                                  Expanded(
-                                    child: Text('Password:'),
-                                  ),
-                                  Expanded(
-                                    child: TextField(
-                                      decoration: InputDecoration(hintText: 'Enter wifi password'),
-                                      controller: readInputText,
-                                    ),
-                                  )
-                                ]),
-                          ),
-
-                          GestureDetector(
-                            child: new Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: <Widget>[
-                                  Expanded(
-                                    child: Text('Month:'),
-                                  ),
-                                  Expanded(
-                                    child: TextField(
-                                      decoration: InputDecoration(hintText: 'password Month'),
-                                      controller: readMonthText,
-                                    ),
-
-                                  )
-                                ]),
-                          ),
-
-
-                          Align(
-                            alignment: Alignment.bottomCenter,
-                            child: RaisedButton(
-                                child : Text('Set Password'),
-                                color : Colors.green,
-                                onPressed: (){
-                                  if (readMonthText.text != ''){
-                                    onPressed();
-                                    Toast.show('The password has successfully been stored!', context, duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
-                                  } else {
-                                    Toast.show('Please a month for the password.', context, duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
-                                  }
-                                }
-                            ),
-                          ),
-
-
-                          //Add  text to say "Passwords to send"
-                          new Text(
-                            'Passwords to Save',
-                             style : TextStyle(
-                              fontSize : 26.0,
-                          )
-
-                          ),
-
-                          Padding(
-                            padding: EdgeInsets.all(8.0),
-                            child: new Text(
-                              inputMonth + '          :          ' + inputPassword,
-                              style: TextStyle(
-                                fontSize: 36,
-                              ),
-                            ),
-
-                          ),
-
-                    ]
-                )
-            )
-        )
-    );
-  }
- */
   _makePostRequest(var i) async {
     //put data from input field to replace '123456', the response of post is not used here, but just leave it there in case of error message in future.
     Response response2;
