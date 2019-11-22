@@ -1,4 +1,4 @@
-import 'package:auto_connect/my_flutter_app_icons.dart';
+
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:toast/toast.dart';
@@ -31,7 +31,7 @@ class MainActivity extends StatefulWidget {
 
 class _MainActivityState extends State {
 
-  bool connectionStatus = false;
+  bool connectionStatus = true;
   String WIFI_SSID = "WIN-BFFP4MARMKN 5784";
   //String ssid2 = "AndroidWifi";
   //String ssid3 = "421 Nelson";
@@ -138,7 +138,7 @@ class _MainActivityState extends State {
                 height: 220,
                 child: FloatingActionButton(
                     child: Icon(
-                        MyFlutterApp.switch_icon,
+                      Icons.power_settings_new,
                       color: Colors.black,
                       size: 160,
                     ),
@@ -529,16 +529,20 @@ class _RouterPageState extends State<RouterPage>{
   //delete method
   String deletepass1;
   String deletemonth1;
+  int deletecount1;
   String deletepass2;
   String deletemonth2;
+  int deletecount2;
 
   //edit method
   final _readInputText3 = new TextEditingController();
   final _readInputText4 = new TextEditingController();
   String oldpass1;
   String oldmonth1;
+  int  oldcount1;
   String oldpass2;
   String oldmonth2;
+  int oldcount2;
 
 
 
@@ -611,7 +615,9 @@ class _RouterPageState extends State<RouterPage>{
     //deletemonth1 = prefs.get(monthKey1);
     prefs.remove(passKey1);
     prefs.remove(monthKey1);
-    //prefs.remove(monthKey1);
+    deletecount1 = prefs.getInt(countS);
+    deletecount1--;
+    prefs.setInt(countS, deletecount1);
     Future<String> password1 = get1();
     password1.then((String p1) {
       _realPass1 = p1;
@@ -627,6 +633,9 @@ class _RouterPageState extends State<RouterPage>{
     //deletemonth2 = prefs.get(monthKey2);
     prefs.remove(passKey2);
     prefs.remove(monthKey2);
+    deletecount2 = prefs.getInt(countS);
+    deletecount2--;
+    prefs.setInt(countS, deletecount2);
     Future<String> password2 = get2();
     password2.then((String p2) {
       _realPass2 = p2;
@@ -670,10 +679,12 @@ class _RouterPageState extends State<RouterPage>{
                 onPressed: (){
                   oldpass1 = prefs.getString(passKey1);
                   oldmonth1 = prefs.getString(monthKey1);
+                  oldcount1 = prefs.getInt(countS);
                   prefs.remove(oldpass1);
                   prefs.remove(oldmonth1);
                   prefs.setString(passKey1, _readInputText3.text);
                   prefs.setString(monthKey1, oldmonth1);
+                  prefs.setInt(countS, oldcount1);
                   Navigator.of(context).pop(newValue);
                   Future<String> password1 = get1();
                   password1.then((String p1) {
@@ -728,10 +739,12 @@ class _RouterPageState extends State<RouterPage>{
                   Navigator.of(context).pop(newValue);
                   oldpass2 = prefs.getString(passKey1);
                   oldmonth2 = prefs.getString(monthKey1);
+                  oldcount1 = prefs.getInt(countS);
                   prefs.remove(oldpass2);
                   prefs.remove(oldmonth2);
                   prefs.setString(passKey2, _readInputText4.text);
                   prefs.setString(monthKey2, oldmonth2);
+                  prefs.setInt(countS, oldcount2);
                   Future<String> password2 = get2();
                   password2.then((String p2) {
                     _realPass2 = p2;
