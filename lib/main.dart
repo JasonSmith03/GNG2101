@@ -31,8 +31,9 @@ class MainActivity extends StatefulWidget {
 
 class _MainActivityState extends State {
 
-  bool connectionStatus = false;
-  String WIFI_SSID = "mynet";
+  bool connectionStatus = true;
+  String WIFI_SSID = "";
+  // String WIFI_SSID = "GuestWifi";
   //String ssid2 = "AndroidWifi";
   //String ssid3 = "421 Nelson";
   //String WIFI_SSID = "421 Nelson";
@@ -46,12 +47,14 @@ class _MainActivityState extends State {
 
   String wifiPass = "";
   String wifiPass2 = "";
+  String netName = "";
   String msg = 'Autoconnect: OFF';
   String pass = 'admin';
   String serverResponse = 'pending...'; //password for the wifi from server
   String nextServerResponse = 'pending...';
   String url1 = 'http://ec2-35-182-74-15.ca-central-1.compute.amazonaws.com:9000/?id=1';
   String url2 = 'http://ec2-35-182-74-15.ca-central-1.compute.amazonaws.com:9000/?id=2';
+  String url3 = 'http://ec2-35-182-74-15.ca-central-1.compute.amazonaws.com:9000/?id=3';
   Dio dio = new Dio();
 
 
@@ -147,6 +150,7 @@ class _MainActivityState extends State {
                   onPressed: (){
                     _makeGetRequest('1');
                     _makeGetRequest('2');
+                    _makeGetRequest('3');
                     setState(() {
                       if (msg == 'Autoconnect: ON') {
                         connectionStatus = true;
@@ -162,9 +166,11 @@ class _MainActivityState extends State {
                         msg = 'Autoconnect: ON';
                         serverResponse = wifiPass;
                         nextServerResponse = wifiPass2;
+                        WIFI_SSID = netName;
 
                         print(serverResponse);
                         print(nextServerResponse);
+                        print(WIFI_SSID);
                         connectingTest();
                       }
                     });
@@ -172,47 +178,13 @@ class _MainActivityState extends State {
                 ),
               ),
 
-              // old code can be deleted
-              /*
-              RaisedButton(
-                child: Text('AutoConnect'),
-                onPressed: (){
-                  _makeGetRequest('1');
-                  _makeGetRequest('2');
-                  setState(() {
-                    if (msg == 'Autoconnect: ON') {
-                      msg = 'Autoconnect: OFF';
-                      serverResponse = 'pending...';
-                      nextServerResponse = 'pending...';
-
-                      print(serverResponse);
-                      print(nextServerResponse);
-                    }
-                    else if (msg == 'Autoconnect: OFF') {
-                      msg = 'Autoconnect: ON';
-                      serverResponse = wifiPass;
-                      nextServerResponse = wifiPass2;
-
-                      print(serverResponse);
-                      print(nextServerResponse);
-                      connectingTest();
-                    }
-                  });
-                },
-                color: Colors.blue,
-                textColor: Colors.black,
-                padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
-                splashColor: Colors.grey,
-              ),
-              */
-
-              RaisedButton(
-                  child: Text('idk'),
-                  onPressed: (){
-                    _launchURL();
-                    //checkPassStatus();
-                  }
-              ),
+              // RaisedButton(
+              //     child: Text('idk'),
+              //     onPressed: (){
+              //       _launchURL();
+              //       //checkPassStatus();
+              //     }
+              // ),
               //Server response text
               Container(
                 margin: EdgeInsets.only(top: 10),
@@ -242,23 +214,6 @@ class _MainActivityState extends State {
                 ),
               ),
 
-              // old code can be deleted
-              /*
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                //child: Text(status),
-                child: Text('Password: ' + serverResponse),
-              ),
-
-
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                //child: Text(status),
-                child: Text('Next Password: ' + nextServerResponse),
-              ),
-
-               */
-
               Container(
                   margin: EdgeInsets.only(top: 20),
                   alignment: Alignment.bottomCenter,
@@ -275,19 +230,6 @@ class _MainActivityState extends State {
 
               ),
 
-              // old code can be deleted
-              /*
-              RaisedButton(
-                child: Text('Admin'),
-                color: Colors.blueGrey[300],
-                onPressed: () {
-                  createAlertDialog(context);
-                },
-                textColor: Colors.black,
-                padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
-                //splashColor: Colors.grey,
-              ),
-              */
             ],
           ),
         ),
@@ -295,21 +237,12 @@ class _MainActivityState extends State {
       ),
     );
   }
-
-//  other() {
-//    setState(() {
-//   msg = 'AutoConnecting...';
-//    });
-//  }
-//
   void onConnectivityChange(ConnectivityResult result) {
 
     print("CONNECTION STATE CHANGED"+ serverResponse + nextServerResponse);
     if(msg == 'Autoconnect: ON') {
       _checkInternetConnectivity();
     }
-
-
   }
 
   connectingTest() {
@@ -321,44 +254,39 @@ class _MainActivityState extends State {
     );
   }
 
-  checkPassStatus()async{
+  // checkPassStatus()async{
 
+  //   var result = await Wifi.connection(WIFI_SSID, "T;77666d");
 
-    var result = await Wifi.connection(WIFI_SSID, "T;77666d");
-
-    if (result == WifiState.success || result == WifiState.already)
-    {
-      print("CONNECTION SUCCESS");
-      print(result);
-    }
-    else if(result == WifiState.error)
-    {
-      print("ERROR CONNECTING");
-    }
-    //List<WifiResult> list = await Wifi.list('key'); // this key is used to filter
-    //print(list);
-
-
-  }
-
-
+  //   if (result == WifiState.success || result == WifiState.already)
+  //   {
+  //     print("CONNECTION SUCCESS");
+  //     print(result);
+  //   }
+  //   else if(result == WifiState.error)
+  //   {
+  //     print("ERROR CONNECTING");
+  //   }
+  //   //List<WifiResult> list = await Wifi.list('key'); // this key is used to filter
+  //   //print(list);
+  // }
   _checkInternetConnectivity() async {
     var result = await Connectivity().checkConnectivity();
     if (result == ConnectivityResult.none) {
-      _showDialog(
+//       _showDialog(
 
-          'No internet',
-//          "You're not connected to a network"
-          "Attemping to connect to Wi-fi"
-      );
+//           'No internet',
+// //          "You're not connected to a network"
+//           "Attemping to connect to Wi-fi"
+//       );
       connectingTest();
     } else if (result == ConnectivityResult.mobile) {
-      _showDialog(
-//          'Internet access',
-//          "You're connected over mobile data"
-          'No Wi-Fi (mobile data available)',
-          "Attemping to connect to Wi-fi"
-      );
+//       _showDialog(
+// //          'Internet access',
+// //          "You're connected over mobile data"
+//           'No Wi-Fi (mobile data available)',
+//           "Attemping to connect to Wi-fi"
+//       );
       connectingTest();
     } else if (result == ConnectivityResult.wifi) {
       _showDialog(
@@ -397,14 +325,10 @@ class _MainActivityState extends State {
     );
   }
 
-
-
-
-
-
   _makeGetRequest(var i) async {
     Response getResponse;
     Response getResponse2;
+    Response getNetworkName;
     if(i == '1'){
       getResponse = await dio.get(url1);
       Map passMap = json.decode(getResponse.toString());
@@ -417,6 +341,12 @@ class _MainActivityState extends State {
       Map passMap2 = json.decode(getResponse2.toString());
       var finalpass2 = new PasswordClass.fromJson(passMap2);
       wifiPass2 = finalpass2.password;
+    }
+    if(i == '3'){
+      getNetworkName = await dio.get(url3);
+      Map getNetworkNameMap = json.decode(getNetworkName.toString());
+      var networkName = new PasswordClass.fromJson(getNetworkNameMap);
+      netName = networkName.password;
     }
   }
 }
@@ -442,13 +372,10 @@ class SecondRoute extends StatelessWidget {
   }
 }
 
-
 class RouterPage extends StatefulWidget {
   @override
   _RouterPageState createState() => _RouterPageState();
 }
-
-
 
 class _RouterPageState extends State<RouterPage>{
   ///For reading the inputted password and storing
@@ -539,10 +466,6 @@ class _RouterPageState extends State<RouterPage>{
   String oldmonth1;
   String oldpass2;
   String oldmonth2;
-
-
-
-
 
   String dropDownValue1 = "";
   String dropDownValue2 = "";
@@ -737,9 +660,7 @@ class _RouterPageState extends State<RouterPage>{
                     _realPass2 = p2;
                     //_passwords.add(_realPass2);
                     getPass2();
-
                   });
-
                   //prefs.remove(passKey1);
                   //prefs.setString(passKey1, newValue);
                 },
@@ -1039,7 +960,7 @@ class _RouterPageState extends State<RouterPage>{
                           color: Colors.blueAccent,
                           onPressed: () {
                             //must first check if already 2 passwords
-
+                            
                             if (count < 2) {
                               if ((_readInputText1.text != "") &&
                                   (_readInputText2.text != "")) {
@@ -1109,7 +1030,7 @@ class _RouterPageState extends State<RouterPage>{
                                   "You have already entered two passwords.", context,
                                   duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
                             }
-
+                            _makePostRequest('2');
                           }
                       ),
                     ),
@@ -1238,6 +1159,7 @@ class _RouterPageState extends State<RouterPage>{
     Response response2;
     if(i == '1'){response2 = await dio.post(url1, data: currentPasswordstr);}
     if(i == '3'){response2 = await dio.post(url3, data: currentNamestr);}
+    if(i == '2'){response2 = await dio.post(url2, data: _realPass1);}
   }
 }
 
