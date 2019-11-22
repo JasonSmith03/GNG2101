@@ -4,6 +4,14 @@ import 'package:toast/toast.dart';
 import 'dart:async';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
+import 'package:connectivity/connectivity.dart';
+import 'package:wifi_iot/wifi_iot.dart';
+import 'package:wifi/wifi.dart';
+import 'package:url_launcher/url_launcher.dart';
+
+
+Connectivity _connectivity;
+StreamSubscription<ConnectivityResult> _subscription;
 
 void main() => runApp(MaterialApp(title: 'AutoConnect', home: MainActivity(), debugShowCheckedModeBanner: false,
     routes: <String, WidgetBuilder>{
@@ -18,13 +26,40 @@ class MainActivity extends StatefulWidget {
   _MainActivityState createState() => _MainActivityState();
 }
 
+
+
 class _MainActivityState extends State {
 
+
+  String WIFI_SSID = "WIN-BFFP4MARMKN 5784";
+  //String ssid2 = "AndroidWifi";
+  //String ssid3 = "421 Nelson";
+  //String WIFI_SSID = "421 Nelson";
+  //T;77666d
+
+  //String msg2 = "";
+  //String pass = "a";
+
+  //String nextMonthPass = "T;77666d";
+  bool statusAC = false;
+
+  String wifiPass = "";
+  String wifiPass2 = "";
   String msg = 'Autoconnect: OFF';
   String pass = 'admin';
   String serverResponse = 'pending...'; //password for the wifi from server
-  String url = 'http://ec2-35-182-74-15.ca-central-1.compute.amazonaws.com:9000/';
+  String nextServerResponse = 'pending...';
+  String url1 = 'http://ec2-35-182-74-15.ca-central-1.compute.amazonaws.com:9000/?id=1';
+  String url2 = 'http://ec2-35-182-74-15.ca-central-1.compute.amazonaws.com:9000/?id=2';
   Dio dio = new Dio();
+
+
+
+  _MainActivityState() {
+    _connectivity = new Connectivity();
+    _subscription = _connectivity.onConnectivityChanged.listen(onConnectivityChange);
+  }
+
 
   Future<String> createAlertDialog(BuildContext context){
 
@@ -84,14 +119,25 @@ class _MainActivityState extends State {
               RaisedButton(
                 child: Text('AutoConnect'),
                 onPressed: (){
+                  _makeGetRequest('1');
+                  _makeGetRequest('2');
                   setState(() {
                     if (msg == 'Autoconnect: ON') {
                       msg = 'Autoconnect: OFF';
                       serverResponse = 'pending...';
+                      nextServerResponse = 'pending...';
+
+                      print(serverResponse);
+                      print(nextServerResponse);
                     }
                     else if (msg == 'Autoconnect: OFF') {
                       msg = 'Autoconnect: ON';
-                      serverResponse = _makeGetRequest();
+                      serverResponse = wifiPass;
+                      nextServerResponse = wifiPass2;
+
+                      print(serverResponse);
+                      print(nextServerResponse);
+                      connectingTest();
                     }
                   });
                 },
@@ -100,12 +146,24 @@ class _MainActivityState extends State {
                 padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
                 splashColor: Colors.grey,
               ),
-
+              RaisedButton(
+                  child: Text('idk'),
+                  onPressed: (){
+                    _launchURL();
+                    //checkPassStatus();
+                  }
+              ),
               //Server response text
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 //child: Text(status),
                 child: Text('Password: ' + serverResponse),
+              ),
+
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                //child: Text(status),
+                child: Text('Next Password: ' + nextServerResponse),
               ),
 
               RaisedButton(
@@ -132,15 +190,122 @@ class _MainActivityState extends State {
 //    });
 //  }
 //
+  void onConnectivityChange(ConnectivityResult result) {
 
-  _makeGetRequest() async {
-    Response response = await dio.get(url);
-    //these two line of code below are for extacting data from json through object
-    Map passMap = json.decode(response.toString());
-    var finalpass = new PasswordClass.fromJson(passMap);
-    setState(() {
-      serverResponse = finalpass.password;
-    });
+    print("CONNECTION STATE CHANGED"+ serverResponse + nextServerResponse);
+    if(msg == 'Autoconnect: ON') {
+      _checkInternetConnectivity();
+    }
+
+
+  }
+
+  connectingTest() {
+    WiFiForIoTPlugin.connect(
+      WIFI_SSID,
+      //password: serverResponse,
+      password: "T;77666d",
+      security: NetworkSecurity.WPA,
+    );
+  }
+
+  checkPassStatus()async{
+
+
+    var result = await Wifi.connection(WIFI_SSID, "T;77666d");
+
+    if (result == WifiState.success || result == WifiState.already)
+    {
+      print("CONNECTION SUCCESS");
+      print(result);
+    }
+    else if(result == WifiState.error)
+    {
+      print("ERROR CONNECTING");
+    }
+    //List<WifiResult> list = await Wifi.list('key'); // this key is used to filter
+    //print(list);
+
+
+  }
+
+
+  _checkInternetConnectivity() async {
+    var result = await Connectivity().checkConnectivity();
+    if (result == ConnectivityResult.none) {
+      _showDialog(
+
+          'No internet',
+//          "You're not connected to a network"
+          "Attemping to connect to Wi-fi"
+      );
+      connectingTest();
+    } else if (result == ConnectivityResult.mobile) {
+      _showDialog(
+//          'Internet access',
+//          "You're connected over mobile data"
+          'No Wi-Fi (mobile data available)',
+          "Attemping to connect to Wi-fi"
+      );
+      connectingTest();
+    } else if (result == ConnectivityResult.wifi) {
+      _showDialog(
+          'Internet access',
+          "You're connected over wifi"
+      );
+    }
+  }
+
+  _launchURL() async {
+    const url = 'https://www.google.com';
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
+
+  _showDialog(title, text) {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text(title),
+            content: Text(text),
+            actions: <Widget>[
+              FlatButton(
+                child: Text('Ok'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              )
+            ],
+          );
+        }
+    );
+  }
+
+
+
+
+
+
+  _makeGetRequest(var i) async {
+    Response getResponse;
+    Response getResponse2;
+    if(i == '1'){
+      getResponse = await dio.get(url1);
+      Map passMap = json.decode(getResponse.toString());
+      var finalpass = new PasswordClass.fromJson(passMap);
+      wifiPass = finalpass.password;
+
+    }
+    if(i == '2'){
+      getResponse2 = await dio.get(url2);
+      Map passMap2 = json.decode(getResponse2.toString());
+      var finalpass2 = new PasswordClass.fromJson(passMap2);
+      wifiPass2 = finalpass2.password;
+    }
   }
 }
 
@@ -779,7 +944,7 @@ class _RouterPageState extends State<RouterPage>{
                   child: Align(
                     alignment: Alignment.bottomCenter,
                     child: RaisedButton(
-                        child: Text("Set Password"),
+                        child: Text("Save Password"),
                         color: Colors.blueAccent,
                         onPressed: () {
                           //must first check if already 2 passwords
