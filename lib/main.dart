@@ -19,11 +19,14 @@ class MainActivity extends StatefulWidget {
 }
 
 class _MainActivityState extends State {
-
+  String wifiPass = "";
+  String wifiPass2 = "";
   String msg = 'Autoconnect: OFF';
   String pass = 'admin';
   String serverResponse = 'pending...'; //password for the wifi from server
-  String url = 'http://ec2-35-182-74-15.ca-central-1.compute.amazonaws.com:9000/';
+  String nextServerResponse = 'pending...';
+  String url1 = 'http://ec2-35-182-74-15.ca-central-1.compute.amazonaws.com:9000/?id=1';
+  String url2 = 'http://ec2-35-182-74-15.ca-central-1.compute.amazonaws.com:9000/?id=2';
   Dio dio = new Dio();
 
   Future<String> createAlertDialog(BuildContext context){
@@ -84,14 +87,18 @@ class _MainActivityState extends State {
               RaisedButton(
                 child: Text('AutoConnect'),
                 onPressed: (){
+                  _makeGetRequest('1');
+                  _makeGetRequest('2');
                   setState(() {
                     if (msg == 'Autoconnect: ON') {
                       msg = 'Autoconnect: OFF';
                       serverResponse = 'pending...';
+                      nextServerResponse = 'pending...';
                     }
                     else if (msg == 'Autoconnect: OFF') {
                       msg = 'Autoconnect: ON';
-                      serverResponse = _makeGetRequest();
+                      serverResponse = wifiPass;
+                      nextServerResponse = wifiPass2;
                     }
                   });
                 },
@@ -106,6 +113,12 @@ class _MainActivityState extends State {
                 padding: const EdgeInsets.all(8.0),
                 //child: Text(status),
                 child: Text('Password: ' + serverResponse),
+              ),
+
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                //child: Text(status),
+                child: Text('Password: ' + nextServerResponse),
               ),
 
               RaisedButton(
@@ -133,14 +146,22 @@ class _MainActivityState extends State {
 //  }
 //
 
-  _makeGetRequest() async {
-    Response response = await dio.get(url);
-    //these two line of code below are for extacting data from json through object
-    Map passMap = json.decode(response.toString());
-    var finalpass = new PasswordClass.fromJson(passMap);
-    setState(() {
-      serverResponse = finalpass.password;
-    });
+   _makeGetRequest(var i) async {
+    Response getResponse;
+    Response getResponse2;
+    if(i == '1'){
+      getResponse = await dio.get(url1);
+      Map passMap = json.decode(getResponse.toString());
+      var finalpass = new PasswordClass.fromJson(passMap);
+      wifiPass = finalpass.password;
+
+    }
+    if(i == '2'){
+      getResponse2 = await dio.get(url2);
+      Map passMap2 = json.decode(getResponse2.toString());
+      var finalpass2 = new PasswordClass.fromJson(passMap2);
+      wifiPass2 = finalpass2.password;
+    }
   }
 }
 
