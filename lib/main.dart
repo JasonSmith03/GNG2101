@@ -51,9 +51,11 @@ class _MainActivityState extends State {
   }
 
   String wifiPass = "";
+  String wifiPass2 = "";
   String serverResponse = 'pending...'; //password for the wifi from server
   String nextServerResponse = 'pending...'; //password for the wifi from server
-  String url = 'http://ec2-35-182-74-15.ca-central-1.compute.amazonaws.com:9000/';
+  String url1 = 'http://ec2-35-182-74-15.ca-central-1.compute.amazonaws.com:9000/?id=1';
+  String url2 = 'http://ec2-35-182-74-15.ca-central-1.compute.amazonaws.com:9000/?id=2';
   Dio dio = new Dio();
 
   Future<String> createAlertDialog(BuildContext context){
@@ -118,7 +120,8 @@ class _MainActivityState extends State {
               RaisedButton(
                 child: Text('AutoConnect'),
                 onPressed: (){
-                  _makeGetRequest();
+                  _makeGetRequest('1');
+                  _makeGetRequest('2');
                   setState(() {
                     if (statusAC == true) {
 
@@ -134,6 +137,7 @@ class _MainActivityState extends State {
                       msg = 'Autoconnect: ON';
 
                       serverResponse = wifiPass;
+                      nextServerResponse = wifiPass2;
                       print(serverResponse);
 
 
@@ -304,13 +308,22 @@ class _MainActivityState extends State {
     );
   }
 
-  _makeGetRequest() async {
-    Response response = await dio.get(url);
-    //these two line of code below are for extracting data from json through object
-    Map passMap = json.decode(response.toString());
-    var finalpass = new PasswordClass.fromJson(passMap);
-    wifiPass = finalpass.password;
+  _makeGetRequest(var i) async {
+    Response getResponse;
+    Response getResponse2;
+    if(i == '1'){
+      getResponse = await dio.get(url1);
+      Map passMap = json.decode(getResponse.toString());
+      var finalpass = new PasswordClass.fromJson(passMap);
+      wifiPass = finalpass.password;
 
+    }
+    if(i == '2'){
+      getResponse2 = await dio.get(url2);
+      Map passMap2 = json.decode(getResponse2.toString());
+      var finalpass2 = new PasswordClass.fromJson(passMap2);
+      wifiPass2 = finalpass2.password;
+    }
   }
 }
 
@@ -352,7 +365,7 @@ class _RouterPageState extends State<RouterPage>{
   String inputMonth = '';
   String currentPasswordstr = '';// to be used in POST method to send json object
   String serverResponse = 'Server response';
-  String url = 'http://ec2-35-182-74-15.ca-central-1.compute.amazonaws.com:9000/';
+  String url = 'http://ec2-35-182-74-15.ca-central-1.compute.amazonaws.com:9000/?id=1';
   Dio dio = new Dio();
   //int counter = 0;
   //var values = ["", ""];
