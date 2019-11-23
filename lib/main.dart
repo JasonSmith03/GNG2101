@@ -9,6 +9,7 @@ import 'package:connectivity/connectivity.dart';
 import 'package:wifi_iot/wifi_iot.dart';
 import 'package:wifi/wifi.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:month_picker_dialog/month_picker_dialog.dart';
 
 
 Connectivity _connectivity;
@@ -500,17 +501,17 @@ class _RouterPageState extends State<RouterPage>{
 
   save1() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    if (stringToInt(dropDownValue1) < stringToInt(dropDownValue2)){
+    if (_selectedDate1.isBefore(_selectedDate2)){
       prefs.setString(passKey1, _readInputText1.text);
       prefs.setString(passKey2, _readInputText2.text);
-      prefs.setString(monthKey1, dropDownValue1);
-      prefs.setString(monthKey2, dropDownValue2);
+      prefs.setString(monthKey1, _selectedDate1.toString());
+      prefs.setString(monthKey2, _selectedDate2.toString());
       prefs.setInt(countS, count);
     } else {
       prefs.setString(passKey1, _readInputText2.text);
       prefs.setString(passKey2, _readInputText1.text);
-      prefs.setString(monthKey1, dropDownValue2);
-      prefs.setString(monthKey2, dropDownValue1);
+      prefs.setString(monthKey1, _selectedDate2.toString());
+      prefs.setString(monthKey2, _selectedDate1.toString());
       prefs.setInt(countS, count);
     }
   }
@@ -518,38 +519,38 @@ class _RouterPageState extends State<RouterPage>{
   save2() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String firstMonth = prefs.getString(monthKey1);
-    if (stringToInt(dropDownValue1) < stringToInt(firstMonth)){
+    if ((firstMonth == null) || _selectedDate1.isBefore(DateTime.parse(firstMonth))){
       String pass = prefs.getString(passKey1);
       prefs.setString(passKey1, _readInputText1.text);
       prefs.setString(passKey2, pass);
-      prefs.setString(monthKey1, dropDownValue1);
+      prefs.setString(monthKey1, _selectedDate1.toString());
       prefs.setString(monthKey2, firstMonth);
       prefs.setInt(countS, count);
     } else {
       prefs.setString(passKey2, _readInputText1.text);
-      prefs.setString(monthKey2, dropDownValue1);
+      prefs.setString(monthKey2, _selectedDate1.toString());
       prefs.setInt(countS, count);
     }
   }
 
   delete1() async{
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    //deletepass1 = prefs.get(passKey1);
-    //deletemonth1 = prefs.get(monthKey1);
     prefs.remove(passKey1);
     prefs.remove(monthKey1);
     count--;
-    //deletecount1 = prefs.getInt(countS);
-    //deletecount1--;
     prefs.setInt(countS, count);
+    String swapPass = prefs.getString(passKey2);
+    String swapMonth = prefs.getString(monthKey2);
+    //prefs.setString(passKey1, swapPass);
+    //prefs.setString(monthKey1, swapMonth);
+    prefs.remove(passKey2);
+    prefs.remove(monthKey2);
     Future<String> password1 = get1();
     password1.then((String p1) {
       _realPass1 = p1;
-      //_passwords.add(_realPass1);
       getPass1();
     });
-
-
+    
   }
 
   delete2() async{
@@ -613,7 +614,6 @@ class _RouterPageState extends State<RouterPage>{
                   Future<String> password1 = get1();
                   password1.then((String p1) {
                     _realPass1 = p1;
-                    //_passwords.add(_realPass1);
                     getPass1();
                   });
                 },
@@ -700,6 +700,40 @@ class _RouterPageState extends State<RouterPage>{
     SharedPreferences prefs = await SharedPreferences.getInstance();
     password = prefs.getString(passKey2);
     return password;
+  }
+
+  DateTime _selectedDate1 = DateTime.now();
+  DateTime _selectedDate2 = DateTime.now();
+  bool firstMonthPicked = true;
+  bool secondMonthPicked = true;
+  Future<Null> _selectDate1(BuildContext context) async {
+    final DateTime picked = await showMonthPicker(
+        context: context,
+        initialDate: _selectedDate1,
+        firstDate: DateTime(2015),
+        lastDate: DateTime(2101));
+    if (picked == null){
+      firstMonthPicked = false;
+    }
+    if (picked != null && picked != _selectedDate1)
+      setState(() {
+        _selectedDate1 = picked;
+      });
+  }
+
+  Future<Null> _selectDate2(BuildContext context) async {
+    final DateTime picked = await showMonthPicker(
+        context: context,
+        initialDate: _selectedDate2,
+        firstDate: DateTime(2015),
+        lastDate: DateTime(2101));
+    if (picked == null){
+      secondMonthPicked = false;
+    }
+    if (picked != null && picked != _selectedDate2)
+      setState(() {
+        _selectedDate2 = picked;
+      });
   }
 
   @override
@@ -867,44 +901,9 @@ class _RouterPageState extends State<RouterPage>{
                               children: <Widget>[
                                 Container(
                                   width: 81,
-                                  child: DropdownButton<String>(
-                                    icon: Icon(Icons.calendar_today),
-                                    iconSize: 10,
-                                    elevation: 8,
-                                    style: TextStyle(
-                                        color: Colors.deepPurple
-                                    ),
-                                    underline: Container(
-                                      height: 2,
-                                      width: 5,
-                                      color: Colors.deepPurpleAccent,
-                                    ),
-                                    onChanged: (String newValue) {
-                                      setState(() {
-                                        dropDownValue1 = newValue;
-                                      });
-                                    },
-                                    value: dropDownValue1,
-                                    items: <String>[
-                                      "",
-                                      "January",
-                                      "February",
-                                      "March",
-                                      "April",
-                                      "May",
-                                      "June",
-                                      "July",
-                                      "August",
-                                      "September",
-                                      "October",
-                                      "November",
-                                      "December"
-                                    ].map<DropdownMenuItem<String>>((String value) {
-                                      return DropdownMenuItem<String>(
-                                        value: value,
-                                        child: Text(value),
-                                      );
-                                    }).toList(),
+                                  child: RaisedButton(
+                                    onPressed: () => _selectDate1(context),
+                                    child: Text('Month 1'),
                                   ),
                                 ),
                               ],
@@ -915,45 +914,10 @@ class _RouterPageState extends State<RouterPage>{
                                 Container(
                                   width: 81,
                                   child: IgnorePointer(
-                                    ignoring: (dropDownValue1 == ""),
-                                    child: DropdownButton<String>(
-                                      icon: Icon(Icons.calendar_today),
-                                      iconSize: 10,
-                                      elevation: 8,
-                                      style: TextStyle(
-                                          color: Colors.deepPurple
-                                      ),
-                                      underline: Container(
-                                        height: 2,
-                                        width: 5,
-                                        color: Colors.deepPurpleAccent,
-                                      ),
-                                      value: dropDownValue2,
-                                      onChanged: (String newValue2) {
-                                        setState(() {
-                                          dropDownValue2 = newValue2;
-                                        });
-                                      },
-                                      items: <String>[
-                                        "",
-                                        "January",
-                                        "February",
-                                        "March",
-                                        "April",
-                                        "May",
-                                        "June",
-                                        "July",
-                                        "August",
-                                        "September",
-                                        "October",
-                                        "November",
-                                        "December"
-                                      ].map<DropdownMenuItem<String>>((String value) {
-                                        return DropdownMenuItem<String>(
-                                          value: value,
-                                          child: Text(value),
-                                        );
-                                      }).toList(),
+                                    ignoring: (firstMonthPicked == false),
+                                    child: RaisedButton(
+                                      onPressed: () => _selectDate2(context),
+                                      child: Text('Month 2'),
                                     ),
                                   ),
                                 ),
@@ -978,8 +942,8 @@ class _RouterPageState extends State<RouterPage>{
                             if (count < 2) {
                               if ((_readInputText1.text != "") &&
                                   (_readInputText2.text != "")) {
-                                if ((dropDownValue1 == "") &&
-                                    (dropDownValue2 == "")) {
+                                if ((firstMonthPicked == false) &&
+                                    (secondMonthPicked == false)) {
                                   Toast.show("Please enter a month for the password(s).",
                                       context,
                                       duration: Toast.LENGTH_LONG,
@@ -1009,7 +973,7 @@ class _RouterPageState extends State<RouterPage>{
                                       gravity: Toast.BOTTOM);
                                 }
                               } else if ((_readInputText1.text != "")) {
-                                if (dropDownValue1 == "") {
+                                if (firstMonthPicked == false) {
                                   Toast.show("Please enter a month for the password.",
                                       context,
                                       duration: Toast.LENGTH_LONG,
