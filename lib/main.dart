@@ -567,8 +567,6 @@ class _RouterPageState extends State<RouterPage>{
       //_passwords.add(_realPass2);
       getPass2();
     });
-
-
   }
 
   Future<String> edit1(BuildContext context) async{
