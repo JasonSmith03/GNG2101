@@ -615,15 +615,17 @@ class _RouterPageState extends State<RouterPage>{
     //deletemonth1 = prefs.get(monthKey1);
     prefs.remove(passKey1);
     prefs.remove(monthKey1);
-    deletecount1 = prefs.getInt(countS);
-    deletecount1--;
-    prefs.setInt(countS, deletecount1);
+    count--;
+    //deletecount1 = prefs.getInt(countS);
+    //deletecount1--;
+    prefs.setInt(countS, count);
     Future<String> password1 = get1();
     password1.then((String p1) {
       _realPass1 = p1;
       //_passwords.add(_realPass1);
       getPass1();
     });
+
 
   }
 
@@ -633,15 +635,16 @@ class _RouterPageState extends State<RouterPage>{
     //deletemonth2 = prefs.get(monthKey2);
     prefs.remove(passKey2);
     prefs.remove(monthKey2);
-    deletecount2 = prefs.getInt(countS);
-    deletecount2--;
-    prefs.setInt(countS, deletecount2);
+    //deletecount2 = prefs.getInt(countS);
+    count--;
+    prefs.setInt(countS, count);
     Future<String> password2 = get2();
     password2.then((String p2) {
       _realPass2 = p2;
       //_passwords.add(_realPass2);
       getPass2();
     });
+
 
   }
 
