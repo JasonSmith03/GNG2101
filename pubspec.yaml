@@ -30,6 +30,7 @@ dependencies:
   connectivity: ^0.4.5+3
   wifi: ^0.1.5
   url_launcher: ^5.2.5
+  month_picker_dialog: ^0.3.0
 
   wifi_iot:
     git: https://github.com/alternadom/WiFiFlutter.git
