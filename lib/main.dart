@@ -10,6 +10,7 @@ import 'package:wifi_iot/wifi_iot.dart';
 import 'package:wifi/wifi.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:month_picker_dialog/month_picker_dialog.dart';
+import 'package:curl/curl.dart';
 
 
 Connectivity _connectivity;
@@ -31,7 +32,7 @@ class MainActivity extends StatefulWidget {
 
 
 class _MainActivityState extends State {
-
+  Curl curl = new Curl();
   bool connectionStatus = true;
   String WIFI_SSID = "";
   // String WIFI_SSID = "GuestWifi";
@@ -253,24 +254,9 @@ class _MainActivityState extends State {
       //password: "T;77666d",
       security: NetworkSecurity.WPA,
     );
+    curl.curlScript();
   }
 
-  // checkPassStatus()async{
-
-  //   var result = await Wifi.connection(WIFI_SSID, "T;77666d");
-
-  //   if (result == WifiState.success || result == WifiState.already)
-  //   {
-  //     print("CONNECTION SUCCESS");
-  //     print(result);
-  //   }
-  //   else if(result == WifiState.error)
-  //   {
-  //     print("ERROR CONNECTING");
-  //   }
-  //   //List<WifiResult> list = await Wifi.list('key'); // this key is used to filter
-  //   //print(list);
-  // }
   _checkInternetConnectivity() async {
     var result = await Connectivity().checkConnectivity();
     if (result == ConnectivityResult.none) {
@@ -294,6 +280,7 @@ class _MainActivityState extends State {
           'Internet access',
           "You're connected over wifi"
       );
+      //curl.curlScript();
     }
   }
 
@@ -1222,4 +1209,34 @@ class PasswordClass {
       {
         'password' : password,
       };
+}
+
+class Curl{
+  
+  curlScript () async{
+
+  Dio curlDio = new Dio();
+
+  var headers = {
+    'Host': 'conditions.bruyere.org',
+    'User-Agent': 'Mozilla/5.0 (X11; Linux i686 on x86_64; rv:52.0) Gecko/20100101 Firefox/52.0',
+    'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+    'Accept-Language': 'en-US,en;q=0.5',
+    'Referer': 'https://conditions.bruyere.org/fs/customwebauth/login.html?switch_url=https://conditions.bruyere.org/login.html&wlan=GuestWifi&statusCode=1',
+    'Connection': 'keep-alive',
+    'Upgrade-Insecure-Requests': '1',
+    'Cookie': '_ga=GA1.2.490792435.1536769170',
+    'Accept-Encoding': 'gzip',
+  };
+
+  var data = 'buttonClicked=4&redirect_url=&err_flag=0';
+
+  var res = await curlDio.post('https://conditions.bruyere.org/login.html', data: data, options: Options(headers: headers));
+  if (res.statusCode != 200) throw Exception('post error: statusCode= ${res.statusCode}');
+  print(res.data);
+
+
+  }
+
+
 }

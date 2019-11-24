@@ -43,6 +43,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.1.2"
+  curl:
+    dependency: "direct main"
+    description:
+      name: curl
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.0"
   dio:
     dependency: "direct main"
     description:
