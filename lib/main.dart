@@ -10,6 +10,8 @@ import 'package:wifi_iot/wifi_iot.dart';
 import 'package:wifi/wifi.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:month_picker_dialog/month_picker_dialog.dart';
+import 'package:curl/curl.dart';
+import 'package:http/http.dart';
 
 
 Connectivity _connectivity;
