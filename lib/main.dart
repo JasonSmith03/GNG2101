@@ -305,19 +305,25 @@ class _MainActivityState extends State {
       getResponse = await dio.get(url1);
       Map passMap = json.decode(getResponse.toString());
       var finalpass = new PasswordClass.fromJson(passMap);
-      wifiPass = finalpass.password;
+      Map passMapTran = json.decode(finalpass.password.toString());
+      var finalpassTran = new PasswordClass.fromJson(passMapTran);
+      wifiPass = finalpassTran.password;
     }
     if (i == '2') {
       getResponse2 = await dio.get(url2);
       Map passMap2 = json.decode(getResponse2.toString());
       var finalpass2 = new PasswordClass.fromJson(passMap2);
-      wifiPass2 = finalpass2.password;
+      Map passMap2Tran = json.decode(finalpass2.password.toString());
+      var finalpass2Tran = new PasswordClass.fromJson(passMap2Tran);
+      wifiPass2 = finalpass2Tran.password;
     }
     if (i == '3') {
       getNetworkName = await dio.get(url3);
       Map getNetworkNameMap = json.decode(getNetworkName.toString());
       var networkName = new PasswordClass.fromJson(getNetworkNameMap);
-      netName = networkName.password;
+      Map getNetworkNameMapTran = json.decode(networkName.password.toString());
+      var networkNameTran = new PasswordClass.fromJson(getNetworkNameMapTran);
+      netName = networkNameTran.password;
     }
   }
 }
@@ -1078,14 +1084,18 @@ class _RouterPageState extends State<RouterPage> {
   _makePostRequest(var i) async {
     //put data from input field to replace '123456', the response of post is not used here, but just leave it there in case of error message in future.
     Response response2;
+
     if (i == '1') {
-      response2 = await dio.post(url1, data: currentPasswordstr);
-    }
-    if (i == '3') {
-      response2 = await dio.post(url3, data: currentNamestr);
+      var currentPost = new PasswordClass(currentPasswordstr);
+      response2 = await dio.post(url1, data: currentPost);
     }
     if (i == '2') {
-      response2 = await dio.post(url2, data: _realPass1);
+      var nextPost = new PasswordClass(_realPass1);
+      response2 = await dio.post(url2, data: nextPost);
+    }
+    if (i == '3') {
+      var namePost = new PasswordClass(currentNamestr);
+      response2 = await dio.post(url3, data: namePost);
     }
   }
 }
