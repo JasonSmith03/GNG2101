@@ -321,7 +321,6 @@ class _MainActivityState extends State {
       getNetworkName = await dio.get(url3);
       Map networkNameMap = json.decode(getNetworkName.toString());
       var networkName = new PasswordClass.fromJson(networkNameMap);
-      netName = networkName.password;
       Map getNetworkNameMapTran = json.decode(networkName.password.toString());
       var networkNameTran = new PasswordClass.fromJson(getNetworkNameMapTran);
       netName = networkNameTran.password;
