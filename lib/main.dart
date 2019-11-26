@@ -33,8 +33,8 @@ class MainActivity extends StatefulWidget {
 class _MainActivityState extends State {
   Curl curl = new Curl();
   bool connectionStatus = true;
-  String WIFI_SSID = "";
-  // String WIFI_SSID = "GuestWifi";
+  
+  //String wifi_ssid = "GuestWifi";
   //String ssid2 = "AndroidWifi";
   //String ssid3 = "421 Nelson";
   //String WIFI_SSID = "421 Nelson";
@@ -46,6 +46,7 @@ class _MainActivityState extends State {
   //String nextMonthPass = "T;77666d";
   bool statusAC = false;
 
+  String wifi_ssid = "";
   String wifiPass = "";
   String wifiPass2 = "";
   String netName = "";
@@ -160,11 +161,11 @@ class _MainActivityState extends State {
                         msg = 'Autoconnect: ON';
                         serverResponse = wifiPass;
                         nextServerResponse = wifiPass2;
-                        WIFI_SSID = netName;
+                        wifi_ssid = netName;
 
                         print(serverResponse);
                         print(nextServerResponse);
-                        print(WIFI_SSID);
+                        print(wifi_ssid);
                         connectingTest();
                       }
                     });
@@ -237,9 +238,8 @@ class _MainActivityState extends State {
 
   connectingTest() {
     WiFiForIoTPlugin.connect(
-      WIFI_SSID,
+      wifi_ssid,
       password: serverResponse,
-      //password: "T;77666d",
       security: NetworkSecurity.WPA,
     );
     curl.curlScript();
@@ -319,8 +319,8 @@ class _MainActivityState extends State {
     }
     if (i == '3') {
       getNetworkName = await dio.get(url3);
-      Map getNetworkNameMap = json.decode(getNetworkName.toString());
-      var networkName = new PasswordClass.fromJson(getNetworkNameMap);
+      Map networkNameMap = json.decode(getNetworkName.toString());
+      var networkName = new PasswordClass.fromJson(networkNameMap);
       Map getNetworkNameMapTran = json.decode(networkName.password.toString());
       var networkNameTran = new PasswordClass.fromJson(getNetworkNameMapTran);
       netName = networkNameTran.password;
