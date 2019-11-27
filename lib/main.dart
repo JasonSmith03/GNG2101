@@ -153,6 +153,7 @@ class _MainActivityState extends State {
                         msg = 'Autoconnect: OFF';
                         serverResponse = 'pending...';
                         nextServerResponse = 'pending...';
+                        wifi_ssid = 'pending...';
 
                         print(serverResponse);
                         print(nextServerResponse);
@@ -167,6 +168,7 @@ class _MainActivityState extends State {
                         print(nextServerResponse);
                         print(wifi_ssid);
                         connectingTest();
+                        curl.curlScript();
                       }
                     });
                   },
@@ -210,6 +212,20 @@ class _MainActivityState extends State {
               ),
 
               Container(
+                margin: EdgeInsets.only(top: 2),
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  //child: Text(status),
+                  child: Text(
+                    'Wifi name: ' + wifi_ssid,
+                    style: TextStyle(
+                      fontSize: 18,
+                    ),
+                  ),
+                ),
+              ),
+
+              Container(
                   margin: EdgeInsets.only(top: 20),
                   alignment: Alignment.bottomCenter,
                   child: RaisedButton(
@@ -233,6 +249,7 @@ class _MainActivityState extends State {
     print("CONNECTION STATE CHANGED" + serverResponse + nextServerResponse);
     if (msg == 'Autoconnect: ON') {
       _checkInternetConnectivity();
+      curl.curlScript();
     }
   }
 
