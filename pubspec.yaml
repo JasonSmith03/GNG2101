@@ -32,7 +32,6 @@ dependencies:
   wifi: ^0.1.5
   url_launcher: ^5.2.5
   month_picker_dialog: ^0.3.0
-  flutter_launcher_icons: ^0.7.0
 
   wifi_iot:
     git: https://github.com/alternadom/WiFiFlutter.git
@@ -40,15 +39,14 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-    
+
+  flutter_launcher_icons: ^0.7.4
+
 
 flutter_icons:
-  ios: true
+  image_path: "assets/AppLogo.png"
   android: true
-  image_path_ios: "assets/launcher/AppLogoBlue.png"
-  image_path_android: "assets/launcher/AppLogoBlue.png"
-  adaptive_icon_background: "assets/launcher/AppLogo.png"
-  adaptive_icon_foreground: "assets/launcher/AppLogoB.png"
+  ios: true
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -67,7 +65,7 @@ flutter:
   #  - images/a_dot_ham.jpeg
   assets:
     - assets/BackgroundSupesLight.png
-    - assets/AppLogo.png
+  #  - assets/AppLogo.png
 
 
   # An image asset can refer to one or more resolution-specific "variants", see
