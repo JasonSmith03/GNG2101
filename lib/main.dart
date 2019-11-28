@@ -6,7 +6,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 import 'package:connectivity/connectivity.dart';
 import 'package:wifi_iot/wifi_iot.dart';
-//import 'package:wifi/wifi.dart';
+import 'package:wifi/wifi.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:month_picker_dialog/month_picker_dialog.dart';
 import 'package:curl/curl.dart';
@@ -106,7 +106,6 @@ class _MainActivityState extends State {
     _initCheck();
     if (msg == 'Autoconnect: ON') {
     connectionStatus = true;
-    msg = 'Autoconnect: OFF';
     serverResponse = 'pending...';
     nextServerResponse = 'pending...';
 
@@ -114,15 +113,7 @@ class _MainActivityState extends State {
     print(nextServerResponse);
     } else if (msg == 'Autoconnect: OFF') {
     connectionStatus = false;
-    msg = 'Autoconnect: ON';
-    serverResponse = wifiPass;
-    nextServerResponse = wifiPass2;
-    wifi_ssid = netName;
-
-    print(serverResponse);
-    print(nextServerResponse);
-    print(wifi_ssid);
-    connectingTest();
+    //connectingTest();
     }
   }
   @override
