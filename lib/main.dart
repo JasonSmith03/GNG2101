@@ -105,143 +105,146 @@ class _MainActivityState extends State {
       //backgroundColor: Colors.blue,
       appBar: AppBar(
           title: Text('AutoConnect'), backgroundColor: Colors.blueGrey[400]),
-      body: Container(
-        decoration: BoxDecoration(
-            image: DecorationImage(
-                image: AssetImage('assets/BackgroundSupesLight.png'),
-                fit: BoxFit.cover)),
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Container(
-                margin: EdgeInsets.only(top: 30, bottom: 30),
-                child: Text(
-                  msg,
-                  style: TextStyle(
-                    fontSize: 25,
-                    fontStyle: FontStyle.italic,
-                  ),
-                ),
-              ),
-              /*
-              Text(
-                msg,
-                style: TextStyle(fontSize: 20, fontStyle: FontStyle.italic),
-              ),
+      resizeToAvoidBottomPadding: false,
+      body: Center(
+        child: Container(
+      decoration: BoxDecoration(
+          image: DecorationImage(
+      image: AssetImage('assets/BackgroundSupesLight.png'),
+      fit: BoxFit.cover)),
+      child: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+      margin: EdgeInsets.only(top: 30, bottom: 30),
+      child: Text(
+        msg,
+        style: TextStyle(
+          fontSize: 25,
+          fontStyle: FontStyle.italic,
+        ),
+      ),
+            ),
+            /*
+            Text(
+      msg,
+      style: TextStyle(fontSize: 20, fontStyle: FontStyle.italic),
+            ),
 
-               */
+             */
 
-              Container(
-                width: 260,
-                height: 220,
-                child: FloatingActionButton(
-                  child: Icon(
-                    Icons.power_settings_new,
-                    color: Colors.black,
-                    size: 160,
-                  ),
-                  backgroundColor:
-                      connectionStatus ? Colors.white : Colors.green,
-                  onPressed: () {
-                    _makeGetRequest('1');
-                    _makeGetRequest('2');
-                    _makeGetRequest('3');
-                    setState(() {
-                      if (msg == 'Autoconnect: ON') {
-                        connectionStatus = true;
-                        msg = 'Autoconnect: OFF';
-                        serverResponse = 'pending...';
-                        nextServerResponse = 'pending...';
-                        wifi_ssid = 'pending...';
+            Container(
+      width: 260,
+      height: 220,
+      child: FloatingActionButton(
+        child: Icon(
+          Icons.power_settings_new,
+          color: Colors.black,
+          size: 160,
+        ),
+        backgroundColor:
+            connectionStatus ? Colors.white : Colors.green,
+        onPressed: () {
+          _makeGetRequest('1');
+          _makeGetRequest('2');
+          _makeGetRequest('3');
+          setState(() {
+            if (msg == 'Autoconnect: ON') {
+              connectionStatus = true;
+              msg = 'Autoconnect: OFF';
+              serverResponse = 'pending...';
+              nextServerResponse = 'pending...';
+              wifi_ssid = 'pending...';
 
-                        print(serverResponse);
-                        print(nextServerResponse);
-                      } else if (msg == 'Autoconnect: OFF') {
-                        connectionStatus = false;
-                        msg = 'Autoconnect: ON';
-                        serverResponse = wifiPass;
-                        nextServerResponse = wifiPass2;
-                        wifi_ssid = netName;
+              print(serverResponse);
+              print(nextServerResponse);
+            } else if (msg == 'Autoconnect: OFF') {
+              connectionStatus = false;
+              msg = 'Autoconnect: ON';
+              serverResponse = wifiPass;
+              nextServerResponse = wifiPass2;
+              wifi_ssid = netName;
 
-                        print(serverResponse);
-                        print(nextServerResponse);
-                        print(wifi_ssid);
-                        connectingTest();
-                        curl.curlScript();
-                      }
-                    });
-                  },
-                ),
-              ),
+              print(serverResponse);
+              print(nextServerResponse);
+              print(wifi_ssid);
+              connectingTest();
+              curl.curlScript();
+            }
+          });
+        },
+      ),
+            ),
 
-              // RaisedButton(
-              //     child: Text('idk'),
-              //     onPressed: (){
-              //       _launchURL();
-              //       //checkPassStatus();
-              //     }
-              // ),
-              //Server response text
-              Container(
-                margin: EdgeInsets.only(top: 10),
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  //child: Text(status),
-                  child: Text(
-                    'Password: ' + serverResponse,
-                    style: TextStyle(
-                      fontSize: 18,
-                    ),
-                  ),
-                ),
-              ),
-
-              Container(
-                margin: EdgeInsets.only(top: 2),
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  //child: Text(status),
-                  child: Text(
-                    'Next Password: ' + nextServerResponse,
-                    style: TextStyle(
-                      fontSize: 18,
-                    ),
-                  ),
-                ),
-              ),
-
-              Container(
-                margin: EdgeInsets.only(top: 2),
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  //child: Text(status),
-                  child: Text(
-                    'Wifi name: ' + wifi_ssid,
-                    style: TextStyle(
-                      fontSize: 18,
-                    ),
-                  ),
-                ),
-              ),
-
-              Container(
-                  margin: EdgeInsets.only(top: 20),
-                  alignment: Alignment.bottomCenter,
-                  child: RaisedButton(
-                    child: Text('Admin'),
-                    color: Colors.blueGrey[300],
-                    onPressed: () {
-                      createAlertDialog(context);
-                    },
-                    textColor: Colors.black,
-                    padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
-                    splashColor: Colors.grey,
-                  )),
-            ],
+            // RaisedButton(
+            //     child: Text('idk'),
+            //     onPressed: (){
+            //       _launchURL();
+            //       //checkPassStatus();
+            //     }
+            // ),
+            //Server response text
+            Container(
+      margin: EdgeInsets.only(top: 10),
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        //child: Text(status),
+        child: Text(
+          'Password: ' + serverResponse,
+          style: TextStyle(
+            fontSize: 18,
           ),
         ),
       ),
+            ),
+
+            Container(
+      margin: EdgeInsets.only(top: 2),
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        //child: Text(status),
+        child: Text(
+          'Next Password: ' + nextServerResponse,
+          style: TextStyle(
+            fontSize: 18,
+          ),
+        ),
+      ),
+            ),
+
+            Container(
+      margin: EdgeInsets.only(top: 2),
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        //child: Text(status),
+        child: Text(
+          'Wifi Name: ' + wifi_ssid,
+          style: TextStyle(
+            fontSize: 18,
+          ),
+        ),
+      ),
+            ),
+
+            Container(
+        margin: EdgeInsets.only(top: 20),
+        alignment: Alignment.bottomCenter,
+        child: RaisedButton(
+          child: Text('Admin'),
+          color: Colors.blueGrey[300],
+          onPressed: () {
+            createAlertDialog(context);
+          },
+          textColor: Colors.black,
+          //padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
+          splashColor: Colors.grey,
+        )),
+          ],
+        ),
+      ),
+            ),
+        ),
     );
   }
 
