@@ -32,7 +32,7 @@ class MainActivity extends StatefulWidget {
 
 class _MainActivityState extends State {
   Curl curl = new Curl();
-  bool connectionStatus = true;
+  bool connectionStatus = false;
   
   //String wifi_ssid = "GuestWifi";
   //String ssid2 = "AndroidWifi";
@@ -45,7 +45,7 @@ class _MainActivityState extends State {
 
   //String nextMonthPass = "T;77666d";
   bool statusAC = false;
-
+  String iniName = "";
   String wifi_ssid = "";
   String wifiPass = "";
   String wifiPass2 = "";
@@ -106,6 +106,7 @@ class _MainActivityState extends State {
     _initCheck();
     if (msg == 'Autoconnect: ON') {
     connectionStatus = true;
+    wifi_ssid = 'You have already connect';
     serverResponse = 'pending...';
     nextServerResponse = 'pending...';
 
@@ -113,6 +114,9 @@ class _MainActivityState extends State {
     print(nextServerResponse);
     } else if (msg == 'Autoconnect: OFF') {
     connectionStatus = false;
+    wifi_ssid = 'No Wi-Fi connection';
+    serverResponse = 'pending...';
+    nextServerResponse = 'pending...';
     //connectingTest();
     }
   }
@@ -159,7 +163,7 @@ class _MainActivityState extends State {
                     size: 160,
                   ),
                   backgroundColor:
-                      connectionStatus ? Colors.white : Colors.green,
+                      connectionStatus ? Colors.green : Colors.white,
                   onPressed: () {
                     _makeGetRequest('1');
                     _makeGetRequest('2');
@@ -174,8 +178,6 @@ class _MainActivityState extends State {
                         print(serverResponse);
                         print(nextServerResponse);
                       } else if (msg == 'Autoconnect: OFF') {
-                        connectionStatus = false;
-                        msg = 'Autoconnect: ON';
                         serverResponse = wifiPass;
                         nextServerResponse = wifiPass2;
                         wifi_ssid = netName;
@@ -184,6 +186,8 @@ class _MainActivityState extends State {
                         print(nextServerResponse);
                         print(wifi_ssid);
                         connectingTest();
+                        connectionStatus = false;
+                        msg = 'Autoconnect: ON';
                       }
                     });
                   },
@@ -198,6 +202,20 @@ class _MainActivityState extends State {
               //     }
               // ),
               //Server response text
+              Container(
+                margin: EdgeInsets.only(top: 10),
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  //child: Text(status),
+                  child: Text(
+                    'Name: ' + wifi_ssid,
+                    style: TextStyle(
+                      fontSize: 18,
+                    ),
+                  ),
+                ),
+              ),
+
               Container(
                 margin: EdgeInsets.only(top: 10),
                 child: Padding(
@@ -287,6 +305,7 @@ class _MainActivityState extends State {
   }
   _initCheck() async {
     var iCheck = await Connectivity().checkConnectivity();
+    //iniName = await Wifi.ssid;
     if (iCheck == ConnectivityResult.none) {
 //       _showDialog(
 
