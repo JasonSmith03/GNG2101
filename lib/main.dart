@@ -240,6 +240,23 @@ class _MainActivityState extends State {
           //padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
           splashColor: Colors.grey,
         )),
+        Container(
+        margin: EdgeInsets.only(top: 20),
+        alignment: Alignment.bottomCenter,
+        child: RaisedButton(
+          child: Text('get'),
+          color: Colors.blueGrey[300],
+          onPressed: () {
+           _makeGetRequest('1');
+           print(wifiPass);
+           setState(() {
+              serverResponse = wifiPass;
+           });
+          },
+          textColor: Colors.black,
+          //padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
+          splashColor: Colors.grey,
+        )),
           ],
         ),
       ),
@@ -325,25 +342,19 @@ class _MainActivityState extends State {
       getResponse = await dio.get(url1);
       Map passMap = json.decode(getResponse.toString());
       var finalpass = new PasswordClass.fromJson(passMap);
-      Map passMapTran = json.decode(finalpass.password.toString());
-      var finalpassTran = new PasswordClass.fromJson(passMapTran);
-      wifiPass = finalpassTran.password;
+      wifiPass = finalpass.password;
     }
     if (i == '2') {
       getResponse2 = await dio.get(url2);
       Map passMap2 = json.decode(getResponse2.toString());
       var finalpass2 = new PasswordClass.fromJson(passMap2);
-      Map passMap2Tran = json.decode(finalpass2.password.toString());
-      var finalpass2Tran = new PasswordClass.fromJson(passMap2Tran);
-      wifiPass2 = finalpass2Tran.password;
+      wifiPass2 = finalpass2.password;
     }
     if (i == '3') {
       getNetworkName = await dio.get(url3);
       Map networkNameMap = json.decode(getNetworkName.toString());
       var networkName = new PasswordClass.fromJson(networkNameMap);
-      Map getNetworkNameMapTran = json.decode(networkName.password.toString());
-      var networkNameTran = new PasswordClass.fromJson(getNetworkNameMapTran);
-      netName = networkNameTran.password;
+      netName = networkName.password;
     }
   }
 }
